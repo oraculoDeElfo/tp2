@@ -79,7 +79,7 @@ public class Heap<T extends Comparable<T>> {
         
         if(cosa instanceof Alumno){
             Alumno c = (Alumno) cosa;
-            id_a_indiceHeap[c.id] = indiceNuevo;
+            id_a_indiceHeap[c.obtenerId()] = indiceNuevo;
         }
         //     if (tipoHeap == 1){
         //       

@@ -29,7 +29,7 @@ public class Alumno implements Comparable<Alumno>{
         this.entregado = true;
     }
 
-    private int obtenerId(){
+    public int obtenerId(){
         return this.id;
     }
 
