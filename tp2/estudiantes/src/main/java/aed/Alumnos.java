@@ -5,12 +5,14 @@ public class Alumnos implements Comparable<Alumnos>{
     private boolean entregado;
     private int nota;
     private int[] examen;
+    private int handle;
 
     public Alumnos(int id, int tamañoExamen) {
         this.id = id;
         this.entregado = false;
         this.nota = 0;
         this.examen = new int[tamañoExamen];
+        this.handle = id;
     }
 
     private void actualizarNota (int[] canonico){
@@ -27,8 +29,16 @@ public class Alumnos implements Comparable<Alumnos>{
         this.entregado = true;
     }
 
-    private int devolverId(){
+    private int obtenerId(){
         return this.id;
+    }
+
+    private int obtenerHandle(){
+        return this.handle;
+    }
+
+    public void modificarHandle (int nuevoHandle){
+        handle = nuevoHandle;
     }
 
     @Override
