@@ -35,7 +35,7 @@ public class Heap<T extends Comparable<T>> {
         this.borrar(this.id_a_indiceHeap[id]);
     }
 
-    private void borrar(int indice){                             //Esto es O(log(n)) por la misma razón que agregar()
+    public void borrar(int indice){                             //Esto es O(log(n)) por la misma razón que agregar()
         cambiar(indice, this.longitud-1);
         this.heap.remove(this.longitud-1);      //Esto es O(1) por consigna
         this.longitud--;
@@ -119,7 +119,9 @@ public class Heap<T extends Comparable<T>> {
         return this.heap.get(0);
     }
 
-
+    public T obtener(int indice){
+        return this.heap.get(indice);
+    }
 
 }
 
