@@ -33,6 +33,10 @@ public class Alumno implements Comparable<Alumno>{
         return this.id;
     }
 
+    public int[] obtenerExamen(){
+        return this.examen;
+    }
+
     private int obtenerHandle(){
         return this.handle;
     }
