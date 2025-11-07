@@ -1,0 +1,56 @@
+package aed;
+
+public class Alumnos implements Comparable<Alumnos>{
+    private int id;
+    private boolean entregado;
+    private int nota;
+    private int[] examen;
+
+    public Alumnos(int id, int tamañoExamen) {
+        this.id = id;
+        this.entregado = false;
+        this.nota = 0;
+        this.examen = new int[tamañoExamen];
+    }
+
+    private void actualizarNota (int[] canonico){
+        int notaNueva = 0;
+        for (int i = 0; i < examen.length; i++){
+            if (examen[i] == canonico[i]){
+                notaNueva += 1;
+            }
+        }
+        this.nota = notaNueva;
+    }
+
+    private void entregarExamen(){
+        this.entregado = true;
+    }
+
+    private int devolverId(){
+        return this.id;
+    }
+
+    @Override
+    public int compareTo(Alumnos alumno2){
+
+        if (alumno2.nota < this.nota){
+            return -1;
+        }
+        else if (alumno2.nota > this.nota) {
+            return 1;
+        }
+        else {
+            if (alumno2.id < this.id){
+                return -1;
+            }
+            else if (alumno2.id > this.id){
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+    }
+
+}
