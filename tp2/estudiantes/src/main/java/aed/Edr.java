@@ -2,6 +2,9 @@ package aed;
 import java.util.ArrayList;
 
 public class Edr {
+    private int tamaño_aula;
+    private ArrayList<Alumno> alumnos_examen;
+    private int[] canonico;
 
     public Edr(int LadoAula, int Cant_estudiantes, int[] ExamenCanonico) {
         throw new UnsupportedOperationException("Sin implementar");

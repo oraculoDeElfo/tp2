@@ -1,13 +1,13 @@
 package aed;
 
-public class Alumnos implements Comparable<Alumnos>{
+public class Alumno implements Comparable<Alumno>{
     private int id;
     private boolean entregado;
     private int nota;
     private int[] examen;
     private int handle;
 
-    public Alumnos(int id, int tamañoExamen) {
+    public Alumno(int id, int tamañoExamen) {
         this.id = id;
         this.entregado = false;
         this.nota = 0;
@@ -42,7 +42,7 @@ public class Alumnos implements Comparable<Alumnos>{
     }
 
     @Override
-    public int compareTo(Alumnos alumno2){
+    public int compareTo(Alumno alumno2){
 
         if (alumno2.nota < this.nota){
             return -1;
