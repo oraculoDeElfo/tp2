@@ -24,8 +24,10 @@ public class Edr {
     public double[] notas(){
         double[] res = new double[this.alumnos.size()];
         for (int i=0; i<this.alumnos.size(); i++){
-            res[i] = (double) (this.alumnos[i].obtenerNota()/this.canonico.length())
+            Alumno al = this.alumnos.get(i);
+            res[i] = (double) (al.obtenerNota()/this.canonico.length);
         }
+        return res;
     }
 
 //------------------------------------------------COPIARSE------------------------------------------------------------------------
@@ -127,7 +129,9 @@ public class Edr {
 //-------------------------------------------------ENTREGAR-------------------------------------------------------------
 
     public void entregar(int estudiante) {
-        throw new UnsupportedOperationException("Sin implementar");
+    Alumno estud = this.alumnos.get(estudiante);
+    estud.entregarExamen();
+    alumnos_menor_nota.borrar_por_id(estudiante);
     }
 
 //-----------------------------------------------------CORREGIR---------------------------------------------------------

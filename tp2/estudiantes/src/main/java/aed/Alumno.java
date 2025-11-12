@@ -25,11 +25,19 @@ public class Alumno implements Comparable<Alumno>{
         this.nota = notaNueva;
     }
 
+    public void modificarExamenCompleto (int[] ex){
+        this.examen = ex;
+    }
+
     public void modificarExamen(int NroEjercicio, int res){
         this.examen[NroEjercicio] = res;
     }
 
-    private void entregarExamen(){
+    public int obtenerNota(){
+        return this.nota;
+    }
+
+    public void entregarExamen(){
         this.entregado = true;
     }
 

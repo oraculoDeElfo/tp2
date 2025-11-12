@@ -124,7 +124,7 @@ public class Heap<T extends Comparable<T>> {
         return this.obtener(indice);
     }
 
-    private T obtener(int indice){
+    public T obtener(int indice){
         return this.heap.get(indice);
     }
 
