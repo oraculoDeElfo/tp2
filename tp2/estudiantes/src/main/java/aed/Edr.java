@@ -5,7 +5,7 @@ public class Edr {
     ArrayList<Alumno> alumnos;
     int[] canonico;
     Heap<Alumno> alumnos_menor_nota;
-    ListaEnlazada<Alumno> no_se_copiaron;
+    ArrayList<Alumno> no_se_copiaron;
     int ladoAula;
 
     public Edr(int LadoAula, int Cant_estudiantes, int[] ExamenCanonico) {
@@ -16,7 +16,7 @@ public class Edr {
             this.alumnos.add(new Alumno(i, ExamenCanonico.length));
         }
         this.alumnos_menor_nota = new Heap<Alumno>(this.alumnos);
-        this.no_se_copiaron = new ListaEnlazada<Alumno>();
+        this.no_se_copiaron = new ArrayList<Alumno>();
     }
 
 //-------------------------------------------------NOTAS--------------------------------------------------------------------------
@@ -137,12 +137,77 @@ public class Edr {
 //-----------------------------------------------------CORREGIR---------------------------------------------------------
 
     public NotaFinal[] corregir() {
-        throw new UnsupportedOperationException("Sin implementar");
+        NotaFinal[] res = new NotaFinal[this.no_se_copiaron.size()];
+        Heap<Alumno> heap = new Heap<Alumno>(this.no_se_copiaron);
+        for (int i=0; i<this.no_se_copiaron.size();i++){
+            Alumno al_i = heap.obtener(0);
+            heap.borrar(0);
+
+            res[i] = new NotaFinal(al_i.obtenerNota(), i);
+        }
+
+        return res;
     }
 
 //-------------------------------------------------------CHEQUEAR COPIAS-------------------------------------------------
 
     public int[] chequearCopias() {
-        throw new UnsupportedOperationException("Sin implementar");
+        ArrayList<Integer> pre_res = new ArrayList<Integer>();  
+
+        int[][] preguntas_respuestas = new int[10][this.canonico.length];
+        for (int i=0; i<this.alumnos.size();i++){
+            int[] examen_i = this.alumnos.get(i).obtenerExamen();
+            for (int p=0; p<this.canonico.length;p++){
+                if (examen_i[p]!=-1){
+                    preguntas_respuestas[examen_i[p]][p] += 1;//ver si esta bien el orden
+                }
+            }
+        }
+        int se_copio = (this.alumnos.size() -1)/4;
+
+        for (int i=0; i<this.alumnos.size();i++){
+            int[] examen_i = this.alumnos.get(i).obtenerExamen();
+            int cantPregsCopiadas = 0;
+            int cantPregsRespondidas = 0;
+            for (int p=0; p<this.canonico.length;p++){
+                if (examen_i[p]!=-1){
+                    cantPregsCopiadas+=1;
+                    int cant = preguntas_respuestas[examen_i[p]][p];
+                    if (cant > se_copio){
+                        cantPregsCopiadas += 1;
+                    }
+                     
+                }
+            if (cantPregsCopiadas==cantPregsRespondidas){
+                pre_res.add(i);
+            }
+            else{
+                this.no_se_copiaron.add(this.alumnos.get(i));
+            }
+            }        
+        } 
+        int[] res = new int[pre_res.size()];
+        for (int i=0; i<pre_res.size();i++){
+            res[i] = pre_res.get(i);
+        }
+        return res;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
