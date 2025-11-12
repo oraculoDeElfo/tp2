@@ -119,7 +119,12 @@ public class Heap<T extends Comparable<T>> {
         return this.heap.get(0);
     }
 
-    public T obtener(int indice){
+    public T obtener_con_id(int id){
+        int indice = this.id_a_indiceHeap[id];
+        return this.obtener(indice);
+    }
+
+    private T obtener(int indice){
         return this.heap.get(indice);
     }
 
