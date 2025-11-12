@@ -15,7 +15,7 @@ public class Alumno implements Comparable<Alumno>{
         this.handle = id;
     }
 
-    private void actualizarNota (int[] canonico){
+    public void actualizarNota (int[] canonico){
         int notaNueva = 0;
         for (int i = 0; i < examen.length; i++){
             if (examen[i] == canonico[i]){
@@ -23,6 +23,10 @@ public class Alumno implements Comparable<Alumno>{
             }
         }
         this.nota = notaNueva;
+    }
+
+    public void modificarExamen(int NroEjercicio, int res){
+        this.examen[NroEjercicio] = res;
     }
 
     private void entregarExamen(){
