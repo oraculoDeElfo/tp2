@@ -22,7 +22,10 @@ public class Edr {
 //-------------------------------------------------NOTAS--------------------------------------------------------------------------
 
     public double[] notas(){
-        throw new UnsupportedOperationException("Sin implementar");
+        double[] res = new double[this.alumnos.size()];
+        for (int i=0; i<this.alumnos.size(); i++){
+            res[i] = (double) (this.alumnos[i].obtenerNota()/this.canonico.length())
+        }
     }
 
 //------------------------------------------------COPIARSE------------------------------------------------------------------------
@@ -86,7 +89,7 @@ public class Edr {
             return; 
         }
         else{
-            return;
+            throw new UnsupportedOperationException("casos sin contemplar ");
         }
     }
 
@@ -112,7 +115,12 @@ public class Edr {
 //------------------------------------------------CONSULTAR DARK WEB-------------------------------------------------------
 
     public void consultarDarkWeb(int n, int[] examenDW) {
-        throw new UnsupportedOperationException("Sin implementar");
+        for (int i=0; i<n; i++){
+            Alumno k_i = this.alumnos_menor_nota.obtener(0);//O(1)
+            this.alumnos_menor_nota.borrar(0);//O(log e)
+            k_i.modificarExamenCompleto(examenDW); //O(1)
+            k_i.actualizarNota(this.canonico); //O(R)
+        }
     }
  
 
