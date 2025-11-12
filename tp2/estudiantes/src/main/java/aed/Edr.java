@@ -100,10 +100,10 @@ public class Edr {
         estud.modificarExamen(NroEjercicio, res);  // O(1)
         estud.actualizarNota(canonico); // O(1)
 
-        if  (alumnos_menor_nota.obtener(estudiante) != null){
+        if  (alumnos_menor_nota.obtener_con_id(estudiante) == null){
             alumnos_menor_nota.agregar(estud);// O(log(e))
         } else {
-            alumnos_menor_nota.actualizar_nota_id(estudiante); //??
+            alumnos_menor_nota.actualizar_nota_id(estudiante); //O(log(e))
         }
 
     }
