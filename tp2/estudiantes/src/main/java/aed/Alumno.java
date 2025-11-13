@@ -3,16 +3,19 @@ package aed;
 public class Alumno implements Comparable<Alumno>{
     private int id;
     private boolean entregado;
-    private int nota;
+    private int respuestasCorrectas;
     private int[] examen;
     private int handle;
 
     public Alumno(int id, int tamañoExamen) {
         this.id = id;
         this.entregado = false;
-        this.nota = 0;
+        this.respuestasCorrectas = 0;
         this.examen = new int[tamañoExamen];
         this.handle = id;
+        for (int i = 0; i < tamañoExamen; i++){
+            this.examen[i] = -1;                    // Pendiente chequear complejidad
+        }
     }
 
     public void actualizarNota (int[] canonico){
@@ -22,7 +25,7 @@ public class Alumno implements Comparable<Alumno>{
                 notaNueva += 1;
             }
         }
-        this.nota = notaNueva;
+        this.respuestasCorrectas = notaNueva;
     }
 
     public void modificarExamenCompleto (int[] ex){
@@ -33,8 +36,12 @@ public class Alumno implements Comparable<Alumno>{
         this.examen[NroEjercicio] = res;
     }
 
-    public int obtenerNota(){
-        return this.nota;
+    public int obtenerNota2(){
+        return this.respuestasCorrectas;
+    }
+
+    public double obtenerNota(){
+        return (double) (100 * this.respuestasCorrectas / this.examen.length); 
     }
 
     public void entregarExamen(){
@@ -60,10 +67,10 @@ public class Alumno implements Comparable<Alumno>{
     @Override
     public int compareTo(Alumno alumno2){
 
-        if (alumno2.nota < this.nota){
+        if (alumno2.respuestasCorrectas < this.respuestasCorrectas){
             return -1;
         }
-        else if (alumno2.nota > this.nota) {
+        else if (alumno2.respuestasCorrectas > this.respuestasCorrectas) {
             return 1;
         }
         else {

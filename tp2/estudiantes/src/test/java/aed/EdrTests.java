@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import java.util.Arrays;
 
-
 class EdrTests {
     Edr edr;
     int d_aula;

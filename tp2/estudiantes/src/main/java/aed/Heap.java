@@ -7,13 +7,27 @@ public class Heap<T extends Comparable<T>> {
     private ArrayList<T> heap;
     private int[] id_a_indiceHeap;
     private int longitud;
+    private int tipoHeap;           // -1 para min-heap, 1 para max-heap
     
-    public Heap (ArrayList<T> arr){
+    public Heap (ArrayList<T> arr, int t){
         this.longitud = arr.size();     //Asumo que puedo usar esta función y que es O(1), si no pediría la longitud como argumento que es O(1)
         this.heap = new ArrayList<T>();
         this.id_a_indiceHeap = new int[this.longitud];
+        this.tipoHeap = t;
         for (int i=0;i<this.longitud;i++){
             this.heap.add(arr.get(i));      //Esto es O(n) porque recorre una vez todos los elementos del array
+            this.id_a_indiceHeap[i] = i;
+        }
+        ordenInicial();
+    }
+
+    public Heap (T[] arr, int t){
+        this.longitud = arr.length;     //Asumo que puedo usar esta función y que es O(1), si no pediría la longitud como argumento que es O(1)
+        this.heap = new ArrayList<T>();
+        this.id_a_indiceHeap = new int[this.longitud];
+        this.tipoHeap = t;
+        for (int i=0;i<this.longitud;i++){
+            this.heap.add(arr[i]);      //Esto es O(n) porque recorre una vez todos los elementos del array
             this.id_a_indiceHeap[i] = i;
         }
         ordenInicial();
@@ -40,7 +54,7 @@ public class Heap<T extends Comparable<T>> {
         this.heap.remove(this.longitud-1);      //Esto es O(1) por consigna
         this.longitud--;
         if (indice == this.longitud){return;}
-        if((indice == 0) || this.heap.get(indice).compareTo(this.heap.get(padre(indice))) < 0){
+        if((indice == 0) || this.tipoHeap * this.heap.get(indice).compareTo(this.heap.get(padre(indice))) > 0){
             siftDown(indice);
         } else{
             siftUp(indice);
@@ -94,10 +108,10 @@ public class Heap<T extends Comparable<T>> {
             return;
         }
         int aux = i;
-        if(this.heap.get(aux).compareTo(this.heap.get(izq(i))) < 0){
+        if(this.tipoHeap * this.heap.get(aux).compareTo(this.heap.get(izq(i))) < 0){
             aux = izq(i);
         }
-        if((der(i)<=this.longitud-1) && (this.heap.get(aux).compareTo(this.heap.get(der(i))) < 0)){
+        if((der(i)<=this.longitud-1) && (this.tipoHeap * this.heap.get(aux).compareTo(this.heap.get(der(i))) < 0)){
             aux = der(i);
         }
         if (aux != i){
@@ -108,7 +122,7 @@ public class Heap<T extends Comparable<T>> {
 
     public void siftUp(int i){
         if (i==0){return;}
-        if (this.heap.get(i).compareTo(this.heap.get(padre(i))) > 0){
+        if (this.tipoHeap * this.heap.get(i).compareTo(this.heap.get(padre(i))) > 0){
             cambiar(i, padre(i));
             siftUp(padre(i));
         }

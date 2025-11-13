@@ -12,10 +12,10 @@ public class Edr {
         this.canonico = ExamenCanonico;
         this.ladoAula = LadoAula;
         this.alumnos = new ArrayList<Alumno>(Cant_estudiantes);
-        for (int i = 0; i< this.alumnos.size(); i++){
+        for (int i = 0; i< Cant_estudiantes; i++){
             this.alumnos.add(new Alumno(i, ExamenCanonico.length));
         }
-        this.alumnos_menor_nota = new Heap<Alumno>(this.alumnos);
+        this.alumnos_menor_nota = new Heap<Alumno>(this.alumnos,-1);
         this.no_se_copiaron = new ArrayList<Alumno>();
     }
 
@@ -25,7 +25,7 @@ public class Edr {
         double[] res = new double[this.alumnos.size()];
         for (int i=0; i<this.alumnos.size(); i++){
             Alumno al = this.alumnos.get(i);
-            res[i] = (double) (al.obtenerNota()/this.canonico.length);
+            res[i] = al.obtenerNota();//(double) (100* al.obtenerNota()/this.canonico.length);
         }
         return res;
     }
@@ -138,12 +138,13 @@ public class Edr {
 
     public NotaFinal[] corregir() {
         NotaFinal[] res = new NotaFinal[this.no_se_copiaron.size()];
-        Heap<Alumno> heap = new Heap<Alumno>(this.no_se_copiaron);
         for (int i=0; i<this.no_se_copiaron.size();i++){
-            Alumno al_i = heap.obtener(0);
+            res[i] = new NotaFinal(this.no_se_copiaron.get(i).obtenerNota(), i);
+        }
+        Heap<NotaFinal> heap = new Heap<NotaFinal>(res,1);
+        for (int i=0; i<this.no_se_copiaron.size();i++){
+            res[i] = heap.obtener(0);
             heap.borrar(0);
-
-            res[i] = new NotaFinal(al_i.obtenerNota(), i);
         }
 
         return res;
@@ -163,7 +164,7 @@ public class Edr {
                 }
             }
         }
-        int se_copio = (this.alumnos.size() -1)/4;
+        int unCuartoDelAula = (this.alumnos.size() -1)/4 + 1;
 
         for (int i=0; i<this.alumnos.size();i++){
             int[] examen_i = this.alumnos.get(i).obtenerExamen();
@@ -171,20 +172,21 @@ public class Edr {
             int cantPregsRespondidas = 0;
             for (int p=0; p<this.canonico.length;p++){
                 if (examen_i[p]!=-1){
-                    cantPregsCopiadas+=1;
-                    int cant = preguntas_respuestas[examen_i[p]][p];
-                    if (cant > se_copio){
+                    cantPregsRespondidas+=1;
+                    int cantRespuestasIguales = preguntas_respuestas[examen_i[p]][p] - 1;
+                    if (cantRespuestasIguales >= unCuartoDelAula){
                         cantPregsCopiadas += 1;
                     }
                      
                 }
+            }
             if (cantPregsCopiadas==cantPregsRespondidas){
                 pre_res.add(i);
             }
             else{
                 this.no_se_copiaron.add(this.alumnos.get(i));
             }
-            }        
+                   
         } 
         int[] res = new int[pre_res.size()];
         for (int i=0; i<pre_res.size();i++){

@@ -15,4 +15,5 @@ public class NotaFinal implements Comparable<NotaFinal> {
         }
         return Double.compare(this._nota, otra._nota);
     }
+
 }
