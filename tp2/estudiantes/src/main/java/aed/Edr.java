@@ -139,7 +139,8 @@ public class Edr {
     public NotaFinal[] corregir() {
         NotaFinal[] res = new NotaFinal[this.no_se_copiaron.size()];
         for (int i=0; i<this.no_se_copiaron.size();i++){
-            res[i] = new NotaFinal(this.no_se_copiaron.get(i).obtenerNota(), i);
+            Alumno al = this.no_se_copiaron.get(i);
+            res[i] = new NotaFinal(al.obtenerNota(), al.obtenerId());
         }
         Heap<NotaFinal> heap = new Heap<NotaFinal>(res,1);
         for (int i=0; i<this.no_se_copiaron.size();i++){
@@ -155,16 +156,16 @@ public class Edr {
     public int[] chequearCopias() {
         ArrayList<Integer> pre_res = new ArrayList<Integer>();  
 
-        int[][] preguntas_respuestas = new int[10][this.canonico.length];
+        int[][] preguntas_respuestas = new int[this.canonico.length][10];
         for (int i=0; i<this.alumnos.size();i++){
             int[] examen_i = this.alumnos.get(i).obtenerExamen();
             for (int p=0; p<this.canonico.length;p++){
                 if (examen_i[p]!=-1){
-                    preguntas_respuestas[examen_i[p]][p] += 1;//ver si esta bien el orden
+                    preguntas_respuestas[p][examen_i[p]] += 1;
                 }
             }
         }
-        int unCuartoDelAula = (this.alumnos.size() -1)/4 + 1;
+        int unCuartoDelAula = (this.alumnos.size() -2)/4 + 1;  //ver que no se rompa si hay un solo estudiante
 
         for (int i=0; i<this.alumnos.size();i++){
             int[] examen_i = this.alumnos.get(i).obtenerExamen();
@@ -173,14 +174,14 @@ public class Edr {
             for (int p=0; p<this.canonico.length;p++){
                 if (examen_i[p]!=-1){
                     cantPregsRespondidas+=1;
-                    int cantRespuestasIguales = preguntas_respuestas[examen_i[p]][p] - 1;
+                    int cantRespuestasIguales = preguntas_respuestas[p][examen_i[p]] - 1;
                     if (cantRespuestasIguales >= unCuartoDelAula){
                         cantPregsCopiadas += 1;
                     }
                      
                 }
             }
-            if (cantPregsCopiadas==cantPregsRespondidas){
+            if ((cantPregsCopiadas==cantPregsRespondidas) && (cantPregsRespondidas > 0)){
                 pre_res.add(i);
             }
             else{
