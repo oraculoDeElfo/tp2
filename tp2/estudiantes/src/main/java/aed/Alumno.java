@@ -7,18 +7,18 @@ public class Alumno implements Comparable<Alumno>{
     private int[] examen;
     private int handle;
 
-    public Alumno(int id, int tamañoExamen) {
+    public Alumno(int id, int tamañoExamen) { //O(R)
         this.id = id;
         this.entregado = false;
         this.respuestasCorrectas = 0;
         this.examen = new int[tamañoExamen];
         this.handle = id;
-        for (int i = 0; i < tamañoExamen; i++){
-            this.examen[i] = -1;                    // Pendiente chequear complejidad
+        for (int i = 0; i < tamañoExamen; i++){ //O(R)
+            this.examen[i] = -1;                  
         }
     }
 
-    public void actualizarNota (int[] canonico){
+    public void actualizarNota (int[] canonico){ //O(R)
         int notaNueva = 0;
         for (int i = 0; i < examen.length; i++){
             if (examen[i] == canonico[i]){
@@ -28,39 +28,36 @@ public class Alumno implements Comparable<Alumno>{
         this.respuestasCorrectas = notaNueva;
     }
 
-    public void modificarExamenCompleto (int[] ex){
+    public void modificarExamenCompleto (int[] ex){ //O(1)
         this.examen = ex.clone(); 
     }
 
-    public void modificarExamen(int NroEjercicio, int res){
+    public void modificarExamen(int NroEjercicio, int res){ //O(1)
         this.examen[NroEjercicio] = res;
-        this.respuestasCorrectas += 1;      // Medio rancio esto, seria mejor llamar a actualizarNota creo
+        this.respuestasCorrectas += 1;     
     }
-
-    public int obtenerNota2(){
-        return this.respuestasCorrectas;
-    }
-
-    public double obtenerNota(){
+ 
+    //O(1)
+    public double obtenerNota(){ 
         return (double) (100 * this.respuestasCorrectas / this.examen.length); 
     }
-
+    //O(1)
     public void entregarExamen(){
         this.entregado = true;
     }
-
+    //O(1)
     public int obtenerId(){
         return this.id;
     }
-
+    //O(1)
     public int[] obtenerExamen(){
         return this.examen;
     }
-
+    //O(1)
     private int obtenerHandle(){
         return this.handle;
     }
-
+    //O(1)
     public void modificarHandle (int nuevoHandle){
         handle = nuevoHandle;
     }
