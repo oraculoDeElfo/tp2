@@ -45,8 +45,15 @@ public class Heap<T extends Comparable<T>> {
         siftUp(this.longitud-1);      
     }   
 
+    public void anularId(int id){
+        this.id_a_indiceHeap[id] = -1;
+    }
+
     public void borrar_por_id(int id){
-        this.borrar(this.id_a_indiceHeap[id]);
+        if (this.id_a_indiceHeap[id] != -1){
+            this.borrar(this.id_a_indiceHeap[id]);
+            this.id_a_indiceHeap[id] = -1;
+        }
     }
 
     public void borrar(int indice){                             //Esto es O(log(n)) por la misma razón que agregar()

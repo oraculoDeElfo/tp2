@@ -29,11 +29,12 @@ public class Alumno implements Comparable<Alumno>{
     }
 
     public void modificarExamenCompleto (int[] ex){
-        this.examen = ex;
+        this.examen = ex.clone(); 
     }
 
     public void modificarExamen(int NroEjercicio, int res){
         this.examen[NroEjercicio] = res;
+        this.respuestasCorrectas += 1;      // Medio rancio esto, seria mejor llamar a actualizarNota creo
     }
 
     public int obtenerNota2(){
@@ -67,10 +68,10 @@ public class Alumno implements Comparable<Alumno>{
     @Override
     public int compareTo(Alumno alumno2){
 
-        if (alumno2.respuestasCorrectas < this.respuestasCorrectas){
+        if (alumno2.respuestasCorrectas > this.respuestasCorrectas){
             return -1;
         }
-        else if (alumno2.respuestasCorrectas > this.respuestasCorrectas) {
+        else if (alumno2.respuestasCorrectas < this.respuestasCorrectas) {
             return 1;
         }
         else {

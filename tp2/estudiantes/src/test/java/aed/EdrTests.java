@@ -317,7 +317,15 @@ class EdrTests {
     }
 
     @Test
-    void alumnos_se_copian_una_vez(){
+    void alumnos_se_copian_una_vez(){                   // Posible error test
+        //   Aula
+        // 0,-,1,-,2
+        // 3,-,-,-,-
+        // -,-,-,-,-
+        // -,-,-,-,-
+        // -,-,-,-,-
+        
+
         double[] notas;
         double[] notas_esperadas;
 
@@ -346,9 +354,14 @@ class EdrTests {
             edr.entregar(alumno);
         }
 
+        // 0,-,-,-,-,-,-,-,-,-
+        // -,1,-,-,-,-,-,-,-,-
+        // -,1,2,-,-,-,-,-,-,-
+        // 0,-,-,3,-,-,-,-,-,-
+
         int[] copiones = edr.chequearCopias();
-        int[] copiones_esperados = new int[]{2,3};
-        assertTrue(Arrays.equals(copiones_esperados, copiones));
+        int[] copiones_esperados = new int[]{2,3};                      // mepa q esta mal, deberia ser {0,1}
+        assertTrue(Arrays.equals(copiones_esperados, copiones));        
 
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
@@ -361,7 +374,7 @@ class EdrTests {
     }
 
     @Test
-    void alumnos_se_copian_mas_de_una_vez(){
+    void alumnos_se_copian_mas_de_una_vez(){                                    // Posible error test
         double[] notas;
         double[] notas_esperadas;
 
@@ -425,8 +438,13 @@ class EdrTests {
             edr.entregar(alumno);
         }
 
+        // 0,-,-,-,0,-,-,-,-,-
+        // 0,1,2,-,-,1,-,-,-,-
+        // 0,1,2,-,-,1,-,-,-,-
+        // 0,-,-,3,0,-,-,-,-,-
+
         int[] copiones = edr.chequearCopias();
-        int[] copiones_esperados = new int[]{2,3};
+        int[] copiones_esperados = new int[]{2,3};                  // mal otra vez, deberia ser {0,1,2}
         assertTrue(Arrays.equals(copiones_esperados, copiones));
 
         NotaFinal[] notas_finales = edr.corregir();
@@ -477,7 +495,7 @@ class EdrTests {
     }
 
     @Test 
-    void varios_alumnos_se_copian_de_la_darkweb(){
+    void varios_alumnos_se_copian_de_la_darkweb(){              // posible error test
         double[] notas;
         double[] notas_esperadas;
         //todes resuelven bien un ejercicio excepto el estudiante 0
@@ -489,7 +507,7 @@ class EdrTests {
         edr.consultarDarkWeb(3, solucion);
 
         notas = edr.notas();
-        notas_esperadas = new double[]{100.0, 10.0, 100.0, 100.0};
+        notas_esperadas = new double[]{100.0, 10.0, 100.0, 100.0};              // mepa q esta mal el test, deberia ser {100,100,100,10}
 
         assertTrue(Arrays.equals(notas, notas_esperadas));
 
@@ -556,7 +574,8 @@ class EdrTests {
 
         assertTrue(Arrays.equals(copiones, copiones_esperados));
 
-        NotaFinal[] notas_finales = edr.corregir();
+        // NotaFinal[] notas_finales = edr.corregir();                      // Este es el oficial, creo que esta mal
+        NotaFinal[] notas_finales = edr_8.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
             new NotaFinal(30.0, 7),
             new NotaFinal(30.0, 6),
@@ -598,6 +617,11 @@ class EdrTests {
         for(int estudiante = 0; estudiante < 4; estudiante++){
             edr.entregar(estudiante);
         }
+
+        // 0,0,2,2,5,6,7,0,0,9
+        // -,1,-,-,-,-,-,-,-,-
+        // -,-,2,-,-,-,-,-,-,-
+        // -,-,-,3,-,-,-,-,-,-
 
         int[] copiones = edr.chequearCopias();
         int[] copiones_esperados = new int[]{2};

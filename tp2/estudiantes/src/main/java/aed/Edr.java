@@ -35,59 +35,71 @@ public class Edr {
     private void copiarseAux(Alumno se_copia, int[] copiado_ex){
         int[] se_copia_examen = se_copia.obtenerExamen();
         int i = 0;
-            while (i<se_copia_examen.length || (copiado_ex[i] != -1 && se_copia_examen[i]==-1)){
-                i++;
-            }
-            se_copia.modificarExamen(i, copiado_ex[i]);
+        while (i<se_copia_examen.length && (copiado_ex[i] == -1 || se_copia_examen[i] != -1)){
+        //while (i<se_copia_examen.length || (copiado_ex[i] != -1 && se_copia_examen[i]==-1)){
+            i++;
+        }
+        se_copia.modificarExamen(i, copiado_ex[i]);
     }
 
     public void copiarse(int estudiante) {
         Alumno se_copia = this.alumnos.get(estudiante);
         int[] se_copia_examen = se_copia.obtenerExamen();
 
-        Alumno v1 = this.alumnos.get(estudiante + 1);
-        int[] v1_examen = v1.obtenerExamen();
-
-
-        Alumno v2 = this.alumnos.get(estudiante - 1);
-        int[] v2_examen = v2.obtenerExamen();
-
-        Alumno v3 = null;
-        if (this.ladoAula % 2 == 0){
-            v3 = this.alumnos.get(estudiante - (this.ladoAula/2));
+        int[] dummy = new int[this.canonico.length];
+        for (int i = 0; i < this.canonico.length; i++){
+            dummy[i] = -1;                  
         }
-        else{
-            v3 = this.alumnos.get(estudiante - (this.ladoAula/2)+1);
+
+        int[] vDer_examen = dummy;
+        int[] vIzq_examen = dummy;
+        int[] vAde_examen = dummy;
+
+        if ((2 * estudiante) % this.ladoAula != 0){
+            vIzq_examen = this.alumnos.get(estudiante - 1).obtenerExamen();
         }
-        int[] v3_examen = v3.obtenerExamen();
+
+        if(!(((2 * estudiante) % this.ladoAula + 2 >= this.ladoAula) || (estudiante == this.alumnos.size()-1))){ //arreglar comparacio
+            vDer_examen = this.alumnos.get(estudiante + 1).obtenerExamen();
+        }
+
+        if((2 * estudiante) > this.ladoAula){
+            if (this.ladoAula % 2 == 0){
+                vAde_examen = this.alumnos.get(estudiante - (this.ladoAula/2)).obtenerExamen();
+            }
+            else{
+                vAde_examen = this.alumnos.get(estudiante - (this.ladoAula/2)+1).obtenerExamen();
+            }
+        }
         
-        int contador_v1 = 0;
-        int contador_v2 = 0;
-        int contador_v3 = 0;
+        int contador_vDer = 0;
+        int contador_vIzq = 0;
+        int contador_vAde = 0;
+
         for (int i=0; i<se_copia_examen.length; i++){
             if (se_copia_examen[i] == -1){
-                if (v1_examen[i] != -1){
-                    contador_v1 += 1;
+                if (vDer_examen[i] != -1){
+                    contador_vDer += 1;
                 }
-                if (v2_examen[i] != -1){
-                    contador_v1 += 1;
+                if (vIzq_examen[i] != -1){
+                    contador_vIzq += 1;
                 }
-                if (v3_examen[i] != -1){
-                    contador_v1 += 1;
+                if (vAde_examen[i] != -1){
+                    contador_vAde += 1;
                 }
             }
         }
 
-        if ((contador_v1 >= contador_v2 && contador_v2 >= contador_v3) || (contador_v1 >= contador_v3 && contador_v3 >= contador_v2)){
-            copiarseAux(se_copia, v1_examen);
+        if ((contador_vDer >= contador_vIzq && contador_vIzq >= contador_vAde) || (contador_vDer >= contador_vAde && contador_vAde >= contador_vIzq)){
+            copiarseAux(se_copia, vDer_examen);
             return; 
         }
-        if ((contador_v2 >= contador_v1 && contador_v1 >= contador_v3) || (contador_v2 >= contador_v3 && contador_v3 >= contador_v1)){
-            copiarseAux(se_copia, v2_examen);
+        if ((contador_vIzq >= contador_vDer && contador_vDer >= contador_vAde) || (contador_vIzq >= contador_vAde && contador_vAde >= contador_vDer)){
+            copiarseAux(se_copia, vIzq_examen);
             return; 
         }
-        if ((contador_v3 >= contador_v1 && contador_v1 >= contador_v2) || (contador_v3 >= contador_v2 && contador_v2 >= contador_v1)){
-            copiarseAux(se_copia, v3_examen);
+        if ((contador_vAde >= contador_vDer && contador_vDer >= contador_vIzq) || (contador_vAde >= contador_vIzq && contador_vIzq >= contador_vDer)){
+            copiarseAux(se_copia, vAde_examen);
             return; 
         }
         else{
@@ -117,11 +129,17 @@ public class Edr {
 //------------------------------------------------CONSULTAR DARK WEB-------------------------------------------------------
 
     public void consultarDarkWeb(int n, int[] examenDW) {
+        Alumno[] als = new Alumno[n];
         for (int i=0; i<n; i++){
             Alumno k_i = this.alumnos_menor_nota.obtener(0);//O(1)
+            als[i] = k_i;
             this.alumnos_menor_nota.borrar(0);//O(log e)
+            //this.alumnos_menor_nota.anularId(k_i.obtenerId());
             k_i.modificarExamenCompleto(examenDW); //O(1)
             k_i.actualizarNota(this.canonico); //O(R)
+        }
+        for (Alumno a : als){
+            this.alumnos_menor_nota.agregar(a);
         }
     }
  
@@ -129,9 +147,9 @@ public class Edr {
 //-------------------------------------------------ENTREGAR-------------------------------------------------------------
 
     public void entregar(int estudiante) {
-    Alumno estud = this.alumnos.get(estudiante);
-    estud.entregarExamen();
-    alumnos_menor_nota.borrar_por_id(estudiante);
+        Alumno estud = this.alumnos.get(estudiante);
+        alumnos_menor_nota.borrar_por_id(estudiante);
+        estud.entregarExamen();
     }
 
 //-----------------------------------------------------CORREGIR---------------------------------------------------------
