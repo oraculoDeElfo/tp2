@@ -55,7 +55,7 @@ public class Edr {
         int[] vIzq_examen = dummy;
         int[] vAde_examen = dummy;
 
-        if ((2 * estudiante) % this.ladoAula != 0){
+        if (((2 * estudiante) % this.ladoAula != 0) && ((2 * estudiante) % this.ladoAula != 1)){
             vIzq_examen = this.alumnos.get(estudiante - 1).obtenerExamen();
         }
 
@@ -65,10 +65,10 @@ public class Edr {
 
         if((2 * estudiante) > this.ladoAula){
             if (this.ladoAula % 2 == 0){
-                vAde_examen = this.alumnos.get(estudiante - (this.ladoAula/2)).obtenerExamen();
+                vAde_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();
             }
             else{
-                vAde_examen = this.alumnos.get(estudiante - (this.ladoAula/2)+1).obtenerExamen();
+                vAde_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//cambiamos el +1 por -1
             }
         }
         

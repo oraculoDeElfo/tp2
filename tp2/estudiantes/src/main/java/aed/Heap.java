@@ -10,36 +10,36 @@ public class Heap<T extends Comparable<T>> {
     private int tipoHeap;           // -1 para min-heap, 1 para max-heap
     
     public Heap (ArrayList<T> arr, int t){
-        this.longitud = arr.size();     //Asumo que puedo usar esta función y que es O(1), si no pediría la longitud como argumento que es O(1)
+        this.longitud = arr.size();     
         this.heap = new ArrayList<T>();
         this.id_a_indiceHeap = new int[this.longitud];
         this.tipoHeap = t;
         for (int i=0;i<this.longitud;i++){
-            this.heap.add(arr.get(i));      //Esto es O(n) porque recorre una vez todos los elementos del array
+            this.heap.add(arr.get(i)); 
             this.id_a_indiceHeap[i] = i;
         }
         ordenInicial();
     }
 
     public Heap (T[] arr, int t){
-        this.longitud = arr.length;     //Asumo que puedo usar esta función y que es O(1), si no pediría la longitud como argumento que es O(1)
+        this.longitud = arr.length;
         this.heap = new ArrayList<T>();
         this.id_a_indiceHeap = new int[this.longitud];
         this.tipoHeap = t;
         for (int i=0;i<this.longitud;i++){
-            this.heap.add(arr[i]);      //Esto es O(n) porque recorre una vez todos los elementos del array
+            this.heap.add(arr[i]);
             this.id_a_indiceHeap[i] = i;
         }
         ordenInicial();
     }
 
-    private void ordenInicial(){                                //Esto es O(n) porque es una implementación del algoritmo de Floyd 
+    private void ordenInicial(){
         for (int i = padre(this.longitud-1);i>=0;i--){
             siftDown(i);
         }
     }
 
-    public void agregar(T obj){                                 //Esto es O(log(n)) porque recorre una vez cada nivel, que son log2(n) porque tiene estructura de árbol binario.
+    public void agregar(T obj){
         this.longitud++;
         this.heap.add(obj);
         siftUp(this.longitud-1);      
@@ -56,9 +56,9 @@ public class Heap<T extends Comparable<T>> {
         }
     }
 
-    public void borrar(int indice){                             //Esto es O(log(n)) por la misma razón que agregar()
+    public void borrar(int indice){
         cambiar(indice, this.longitud-1);
-        this.heap.remove(this.longitud-1);      //Esto es O(1) por consigna
+        this.heap.remove(this.longitud-1);
         this.longitud--;
         if (indice == this.longitud){return;}
         if((indice == 0) || this.tipoHeap * this.heap.get(indice).compareTo(this.heap.get(padre(indice))) > 0){
@@ -88,7 +88,7 @@ public class Heap<T extends Comparable<T>> {
         return 2*i+2;
     }
 
-    private void cambiar(int indice1, int indice2){         //O(1) modifica variables de a una una cantidad fija de veces.
+    private void cambiar(int indice1, int indice2){
         T aux = this.heap.get(indice1);
         this.heap.set(indice1, this.heap.get(indice2));
         this.heap.set(indice2, aux);
@@ -102,12 +102,6 @@ public class Heap<T extends Comparable<T>> {
             Alumno c = (Alumno) cosa;
             id_a_indiceHeap[c.obtenerId()] = indiceNuevo;
         }
-        //     if (tipoHeap == 1){
-        //       
-        // } else if (cosa instanceof Ciudad){
-        //     Ciudad c = (Ciudad) cosa;
-        //     c.cambiaPosSuperavit(indiceNuevo);
-        // }
     }
 
     public void siftDown(int i){
