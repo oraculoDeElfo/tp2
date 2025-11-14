@@ -1,6 +1,6 @@
 package aed;
 
-public class NotaFinal implements Comparable<NotaFinal> {
+public class NotaFinal implements Indexable<NotaFinal> {
     public double _nota;
     public int _id;
 
@@ -36,4 +36,10 @@ public class NotaFinal implements Comparable<NotaFinal> {
         return (otra._id == this._id) && (this._nota == otra._nota);
     }
 
+    @Override
+    public int obtenerId(){
+        return this._id;
+    }
+
+    public void
 }

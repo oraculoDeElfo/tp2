@@ -2,7 +2,7 @@ package aed;
 
 import java.util.ArrayList;
 
-public class Heap<T extends Comparable<T>> {
+public class Heap<T extends Indexable<T>> {
     
     private ArrayList<T> heap;
     private int[] id_a_indiceHeap;
@@ -87,6 +87,7 @@ public class Heap<T extends Comparable<T>> {
     private int der(int i){
         return 2*i+2;
     }
+    
     //O(1)
     private void cambiar(int indice1, int indice2){
         T aux = this.heap.get(indice1);
@@ -95,14 +96,12 @@ public class Heap<T extends Comparable<T>> {
         actualizaIndice(this.heap.get(indice2), indice2);
         actualizaIndice(this.heap.get(indice1), indice1);
     }
+
     //O(1)
     private void actualizaIndice(T cosa, int indiceNuevo){
-        
-        if(cosa instanceof Alumno){
-            Alumno c = (Alumno) cosa;
-            id_a_indiceHeap[c.obtenerId()] = indiceNuevo;
-        }
+        id_a_indiceHeap[cosa.obtenerId()] = indiceNuevo;
     }
+
     //O(log(n))
     public void siftDown(int i){
         if (izq(i) > this.longitud-1){

@@ -1,6 +1,6 @@
 package aed;
 
-public class Alumno implements Comparable<Alumno>{
+public class Alumno implements Indexable<Alumno>{
     private int id;
     private boolean entregado;
     private int respuestasCorrectas;
