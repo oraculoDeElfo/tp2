@@ -9,20 +9,20 @@ public class NotaFinal implements Indexable<NotaFinal> {
         _id = id;
     }
 
-    public int compareTo(NotaFinal otra){ //este compareTo comprar por Id y desempata por nota, al revés de la consigna
-        if (otra._id != this._id){
-            return this._id - otra._id;
-        }
-        return Double.compare(this._nota, otra._nota);
-    }
+    //public int compareTo(NotaFinal otra){ //este compareTo comprar por Id y desempata por nota, al revés de la consigna
+    //    if (otra._id != this._id){
+    //        return this._id - otra._id;
+    //    }
+    //    return Double.compare(this._nota, otra._nota);
+    //}
 
-    /*@Override                                          Este sería el compareTo correcto
+    @Override                                          //Este sería el compareTo correcto
     public int compareTo(NotaFinal otra){
         if (otra._nota != this._nota){
             return Double.compare(this._nota, otra._nota);
         } 
-        return this._id - otra._id;
-    } */
+        return -(this._id - otra._id);
+    }
 
     @Override
     public boolean equals(Object o){
@@ -41,5 +41,5 @@ public class NotaFinal implements Indexable<NotaFinal> {
         return this._id;
     }
 
-    public void
+    //public void
 }

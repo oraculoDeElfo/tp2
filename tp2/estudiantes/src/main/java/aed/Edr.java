@@ -38,7 +38,9 @@ public class Edr {
         while (i < se_copia_examen.length && (copiado_ex[i] == -1 || se_copia_examen[i] != -1)){ //O(R)
             i++;
         }
-        se_copia.modificarExamen(i, copiado_ex[i]); //O(1)
+        if (i<se_copia_examen.length){//Para no evaluar si no hay nada que poder copiarse
+            se_copia.modificarExamen(i, copiado_ex[i]); //O(1)
+        }
         this.alumnos_menor_nota.actualizar_nota_id(se_copia.obtenerId()); //O(log(E))
     }
     //O(R+log(E))
@@ -156,7 +158,7 @@ public class Edr {
             Alumno al = this.no_se_copiaron.get(i);
             res[i] = new NotaFinal(al.obtenerNota(), al.obtenerId());
         }
-        Heap<NotaFinal> heap = new Heap<NotaFinal>(res,1);
+        Heap<NotaFinal> heap = new Heap<NotaFinal>(res,-1,this.alumnos.size());
         for (int i=0; i<this.no_se_copiaron.size();i++){  //O(E*log(E))
             res[i] = heap.obtener(0); //O(1)
             heap.borrar(0); //O(log(E))
@@ -164,7 +166,6 @@ public class Edr {
 
         return res;
     }
-
 //-------------------------------------------------------CHEQUEAR COPIAS-------------------------------------------------
     //O(E*R)
     public int[] chequearCopias() {

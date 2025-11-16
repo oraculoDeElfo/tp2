@@ -9,6 +9,22 @@ public class Heap<T extends Indexable<T>> {
     private int longitud;
     private int tipoHeap;           // -1 para min-heap, 1 para max-heap
     
+
+public Heap (T[] arr, int t, int maxId){ // O(n)
+    this.longitud = arr.length; 
+    this.heap = new ArrayList<T>();
+    this.id_a_indiceHeap = new int[maxId]; 
+    this.tipoHeap = t;
+    for (int i = 0; i < maxId; i++) {
+        this.id_a_indiceHeap[i] = -1;
+    }
+    for (int i=0;i<this.longitud;i++){ 
+        this.heap.add(arr[i]);
+        this.id_a_indiceHeap[arr[i].obtenerId()] = i;
+    }
+    ordenInicial();
+}
+
     public Heap (ArrayList<T> arr, int t){
         this.longitud = arr.size();     
         this.heap = new ArrayList<T>();

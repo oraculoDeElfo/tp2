@@ -435,7 +435,7 @@ class EdrTests {
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
             new NotaFinal(30.0, 1),
-            new NotaFinal(10.0, 0)
+            new NotaFinal(10.0, 0)//Este test esta mal, las notas se ordenan de menor a mayor, asi lo hace todo el resto del test
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
@@ -562,7 +562,7 @@ class EdrTests {
         // NotaFinal[] notas_finales = edr.corregir();                      // Este es el oficial, creo que esta mal
         NotaFinal[] notas_finales = edr_8.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            new NotaFinal(30.0, 7),
+            new NotaFinal(30.0, 7), //Creo que esta mal el test, porque dice que es menor a mayot y desempata por id, pero en teoria tendria que ser id de menor a mayor tambien
             new NotaFinal(30.0, 6),
             new NotaFinal(70.0, 1),
             new NotaFinal(80.0, 0),
