@@ -7,14 +7,18 @@ public class Edr {
     Heap<Alumno> alumnos_menor_nota;
     ArrayList<Alumno> no_se_copiaron;
     int ladoAula;
+
     //O(E*R)
     public Edr(int LadoAula, int Cant_estudiantes, int[] ExamenCanonico) {
-        this.canonico = ExamenCanonico.clone();
-        this.ladoAula = LadoAula;
-        this.alumnos = new ArrayList<Alumno>(Cant_estudiantes);
-        for (int i = 0; i< Cant_estudiantes; i++){ //O(E*R)
+        this.canonico = ExamenCanonico.clone(); //O(1)
+        this.ladoAula = LadoAula; //O(1)
+        this.alumnos = new ArrayList<Alumno>(Cant_estudiantes); //O(1)
+
+        //O(E*R)
+        for (int i = 0; i< Cant_estudiantes; i++){ //O(E)
             this.alumnos.add(new Alumno(i, ExamenCanonico.length)); //O(R)
         }
+
         this.alumnos_menor_nota = new Heap<Alumno>(this.alumnos,-1); //O(E)
         this.no_se_copiaron = new ArrayList<Alumno>(); //O(1)
     }
@@ -22,63 +26,74 @@ public class Edr {
 //-------------------------------------------------NOTAS--------------------------------------------------------------------------
     //O(E)
     public double[] notas(){
-        double[] res = new double[this.alumnos.size()];
+        double[] res = new double[this.alumnos.size()];//O(1)
+
+        //O(E*1*1)
         for (int i=0; i<this.alumnos.size(); i++){ //O(E)
-            Alumno al = this.alumnos.get(i);
+            Alumno al = this.alumnos.get(i); //O(1)
             res[i] = al.obtenerNota();//O(1)
         }
+
         return res;
     }
 
 //------------------------------------------------COPIARSE------------------------------------------------------------------------
-    //O(R)
+    //O(R+log(E))
     private void copiarseAux(Alumno se_copia, int[] copiado_ex){
-        int[] se_copia_examen = se_copia.obtenerExamen();
-        int i = 0;
+        int[] se_copia_examen = se_copia.obtenerExamen();//O(1)
+        int i = 0;//O(1)
+
+        //O(R*1)
         while (i < se_copia_examen.length && (copiado_ex[i] == -1 || se_copia_examen[i] != -1)){ //O(R)
-            i++;
+            i++;//O(1)
         }
-        if (i<se_copia_examen.length){//Para no evaluar si no hay nada que poder copiarse
+
+        //O(log(E))
+        if (i<se_copia_examen.length){//O(1)
             se_copia.modificarExamen(i, copiado_ex[i]); //O(1)
+            this.alumnos_menor_nota.actualizar_nota_id(se_copia.obtenerId()); //O(log(E))
         }
-        this.alumnos_menor_nota.actualizar_nota_id(se_copia.obtenerId()); //O(log(E))
     }
+
     //O(R+log(E))
     public void copiarse(int estudiante) {
-        Alumno se_copia = this.alumnos.get(estudiante);
-        int[] se_copia_examen = se_copia.obtenerExamen();
-
+        Alumno se_copia = this.alumnos.get(estudiante);//O(1)
+        int[] se_copia_examen = se_copia.obtenerExamen();//O(1)
         int[] dummy = new int[this.canonico.length]; //O(1)
+
+        //O(R*1)
         for (int i = 0; i < this.canonico.length; i++){  //O(R)
-            dummy[i] = -1;                  
+            dummy[i] = -1;//O(1)                  
         }
 
-        int[] vecino_Der_examen = dummy; 
-        int[] vecino_Izq_examen = dummy;
-        int[] vecino_Ade_examen = dummy;
+        int[] vecino_Der_examen = dummy;//O(1)
+        int[] vecino_Izq_examen = dummy;//O(1)
+        int[] vecino_Ade_examen = dummy;//O(1)
 
-        if (((2 * estudiante) % this.ladoAula != 0) && ((2 * estudiante) % this.ladoAula != 1)){
-            vecino_Izq_examen = this.alumnos.get(estudiante - 1).obtenerExamen();
+        if (((2 * estudiante) % this.ladoAula != 0) && ((2 * estudiante) % this.ladoAula != 1)){//O(1)
+            vecino_Izq_examen = this.alumnos.get(estudiante - 1).obtenerExamen();//O(1)
         }
 
-        if(!(((2 * estudiante) % this.ladoAula + 2 >= this.ladoAula) || (estudiante == this.alumnos.size()-1))){ //arreglar comparacio
-            vecino_Der_examen = this.alumnos.get(estudiante + 1).obtenerExamen();
+        if(!(((2 * estudiante) % this.ladoAula + 2 >= this.ladoAula) || (estudiante == this.alumnos.size()-1))){//O(1) //Arreglar comparacion
+            vecino_Der_examen = this.alumnos.get(estudiante + 1).obtenerExamen();//O(1)
         }
 
-        if((2 * estudiante) > this.ladoAula){
-            if (this.ladoAula % 2 == 0){
-                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();
+        if((2 * estudiante) > this.ladoAula){//O(1)
+            if (this.ladoAula % 2 == 0){//O(1)
+                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//O(1)
             }
             else{
-                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//cambiamos el +1 por -1
+                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//O(1) //cambiamos el +1 por -1
             }
         }
         
-        int contador_vecino_Der = 0;
-        int contador_vecino_Izq = 0;
-        int contador_vecino_Ade = 0;
+        int contador_vecino_Der = 0;//O(1)
+        int contador_vecino_Izq = 0;//O(1)
+        int contador_vecino_Ade = 0;//O(1)
+        
         //O(R)
         for (int i=0; i < se_copia_examen.length; i++){
+            //O(1)
             if (se_copia_examen[i] == -1){
                 if (vecino_Der_examen[i] != -1){
                     contador_vecino_Der += 1;
@@ -91,17 +106,17 @@ public class Edr {
                 }
             }
         }
-        //O(log(E))
+        //O(R+log(E))
         if ((contador_vecino_Der >= contador_vecino_Izq && contador_vecino_Izq >= contador_vecino_Ade) || (contador_vecino_Der >= contador_vecino_Ade && contador_vecino_Ade >= contador_vecino_Izq)){
             copiarseAux(se_copia, vecino_Der_examen);
             return; 
         }
-        //O(log(E))
+        //O(R+log(E))
         if ((contador_vecino_Izq >= contador_vecino_Der && contador_vecino_Der >= contador_vecino_Ade) || (contador_vecino_Izq >= contador_vecino_Ade && contador_vecino_Ade >= contador_vecino_Der)){
             copiarseAux(se_copia, vecino_Izq_examen);
             return; 
         }
-        //O(log(E))
+        //O(R+log(E))
         if ((contador_vecino_Ade >= contador_vecino_Der && contador_vecino_Der >= contador_vecino_Izq) || (contador_vecino_Ade >= contador_vecino_Izq && contador_vecino_Izq >= contador_vecino_Der)){
             copiarseAux(se_copia, vecino_Ade_examen);
             return; 
@@ -129,10 +144,10 @@ public class Edr {
 //------------------------------------------------CONSULTAR DARK WEB-------------------------------------------------------
     //O(k*(R+log(E)))
     public void consultarDarkWeb(int n, int[] examenDW) {
-        Alumno[] als = new Alumno[n];
+        Alumno[] als = new Alumno[n];//O(1)
         for (int i=0; i<n; i++){ //O(k*(R+log(E)))
             Alumno k_i = this.alumnos_menor_nota.obtener(0);//O(1)
-            als[i] = k_i;
+            als[i] = k_i;//O(1)
             this.alumnos_menor_nota.borrar(0);//O(log(E))
             k_i.modificarExamenCompleto(examenDW); //O(1)
             k_i.actualizarNota(this.canonico); //O(R)
@@ -155,11 +170,14 @@ public class Edr {
     public NotaFinal[] corregir() { 
         NotaFinal[] res = new NotaFinal[this.no_se_copiaron.size()]; //O(1)
         for (int i=0; i<this.no_se_copiaron.size();i++){ //O(E)
-            Alumno al = this.no_se_copiaron.get(i);
-            res[i] = new NotaFinal(al.obtenerNota(), al.obtenerId());
+            Alumno al = this.no_se_copiaron.get(i);//O(1)
+            res[i] = new NotaFinal(al.obtenerNota(), al.obtenerId());//O(1)
         }
-        Heap<NotaFinal> heap = new Heap<NotaFinal>(res,-1,this.alumnos.size());
-        for (int i=0; i<this.no_se_copiaron.size();i++){  //O(E*log(E))
+
+        Heap<NotaFinal> heap = new Heap<NotaFinal>(res,1,this.alumnos.size());//O(E)
+
+        //O(E*log(E))
+        for (int i=0; i<this.no_se_copiaron.size();i++){  //O(E)
             res[i] = heap.obtener(0); //O(1)
             heap.borrar(0); //O(log(E))
         }
@@ -169,33 +187,36 @@ public class Edr {
 //-------------------------------------------------------CHEQUEAR COPIAS-------------------------------------------------
     //O(E*R)
     public int[] chequearCopias() {
-        ArrayList<Integer> pre_res = new ArrayList<Integer>();  
+        ArrayList<Integer> pre_res = new ArrayList<Integer>();  //O(1)
+        int[][] preguntas_respuestas = new int[this.canonico.length][10];//O(1)
 
-        int[][] preguntas_respuestas = new int[this.canonico.length][10];
-        for (int i=0; i<this.alumnos.size();i++){ //O(E*R)
-            int[] examen_i = this.alumnos.get(i).obtenerExamen();
+        //O(E*R)
+        for (int i=0; i<this.alumnos.size();i++){ //O(E)
+            int[] examen_i = this.alumnos.get(i).obtenerExamen();//O(1)
             for (int p=0; p<this.canonico.length;p++){ //O(R)
-                if (examen_i[p]!=-1){
-                    preguntas_respuestas[p][examen_i[p]] += 1;
+                if (examen_i[p]!=-1){//O(1)
+                    preguntas_respuestas[p][examen_i[p]] += 1;//O(1)
                 }
             }
         }
-        int unCuartoDelAula = (this.alumnos.size() -2)/4 + 1;  //ver que no se rompa si hay un solo estudiante
+        int unCuartoDelAula = (this.alumnos.size() -2)/4 + 1;//O(1)  //ver que no se rompa si hay un solo estudiante
 
-        for (int i=0; i<this.alumnos.size();i++){ //O(E*R)
-            int[] examen_i = this.alumnos.get(i).obtenerExamen(); 
-            int cantPregsCopiadas = 0;
-            int cantPregsRespondidas = 0;
+        //O(E*R)
+        for (int i=0; i<this.alumnos.size();i++){ //O(E)
+            int[] examen_i = this.alumnos.get(i).obtenerExamen(); //O(1)
+            int cantPregsCopiadas = 0;//O(1)
+            int cantPregsRespondidas = 0;//O(1)
             for (int p=0; p<this.canonico.length;p++){ //O(R)
-                if (examen_i[p]!=-1){
-                    cantPregsRespondidas+=1;
-                    int cantRespuestasIguales = preguntas_respuestas[p][examen_i[p]] - 1;
-                    if (cantRespuestasIguales >= unCuartoDelAula){
-                        cantPregsCopiadas += 1;
+                if (examen_i[p]!=-1){//O(1)
+                    cantPregsRespondidas+=1;//O(1)
+                    int cantRespuestasIguales = preguntas_respuestas[p][examen_i[p]] - 1;//O(1)
+                    if (cantRespuestasIguales >= unCuartoDelAula){//O(1)
+                        cantPregsCopiadas += 1;//O(1)
                     }
-                     
                 }
             }
+
+            //O(1)
             if ((cantPregsCopiadas==cantPregsRespondidas) && (cantPregsRespondidas > 0)){
                 pre_res.add(i);
             }
@@ -204,9 +225,11 @@ public class Edr {
             }
                    
         } 
-        int[] res = new int[pre_res.size()];
+        int[] res = new int[pre_res.size()];//O(1)
+
+        //O(E)
         for (int i=0; i<pre_res.size();i++){  //O(E)
-            res[i] = pre_res.get(i);
+            res[i] = pre_res.get(i);//O(1)
         }
         return res;
     }

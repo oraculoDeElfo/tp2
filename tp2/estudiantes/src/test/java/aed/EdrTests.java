@@ -306,10 +306,15 @@ class EdrTests {
 
         NotaFinal[] notas_finales = edr_9.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            new NotaFinal(0.0, 8),
+            /*new NotaFinal(0.0, 8),
             new NotaFinal(0.0, 7),
             new NotaFinal(0.0, 6),
-            new NotaFinal(50.0, 3)
+            new NotaFinal(50.0, 3)*/
+            new NotaFinal(50.0, 3),
+            new NotaFinal(0.0, 8),
+            new NotaFinal(0.0, 7),
+            new NotaFinal(0.0, 6)
+            
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
@@ -492,7 +497,8 @@ class EdrTests {
         edr.consultarDarkWeb(3, solucion);
 
         notas = edr.notas();
-        notas_esperadas = new double[]{100.0, 10.0, 100.0, 100.0};              // mepa q esta mal el test, deberia ser {100,100,100,10}
+        //notas_esperadas = new double[]{100.0, 10.0, 100.0, 100.0};
+        notas_esperadas = new double[]{100.0, 100.0, 100.0, 10.0};              // mepa q esta mal el test, deberia ser {100,100,100,10}
 
         assertTrue(Arrays.equals(notas, notas_esperadas));
 

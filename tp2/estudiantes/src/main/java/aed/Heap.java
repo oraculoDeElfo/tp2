@@ -4,73 +4,88 @@ import java.util.ArrayList;
 
 public class Heap<T extends Indexable<T>> {
     
-    private ArrayList<T> heap;
-    private int[] id_a_indiceHeap;
+    private ArrayList<T> heap; //N = Largo del array
+    private int[] id_a_indiceHeap; //I = Largo del array
     private int longitud;
-    private int tipoHeap;           // -1 para min-heap, 1 para max-heap
+    private int tipoHeap;//-1 para min-heap, 1 para max-heap
     
+    //O(N+I) -> Como sabemos que N>=I -> //O(N)
+    public Heap (T[] arr, int t, int maxId){ 
+        this.longitud = arr.length;//O(1)
+        this.heap = new ArrayList<T>();// O(1)
+        this.id_a_indiceHeap = new int[maxId]; // O(1)
+        this.tipoHeap = t;// O(1)
 
-public Heap (T[] arr, int t, int maxId){ // O(n)
-    this.longitud = arr.length; 
-    this.heap = new ArrayList<T>();
-    this.id_a_indiceHeap = new int[maxId]; 
-    this.tipoHeap = t;
-    for (int i = 0; i < maxId; i++) {
-        this.id_a_indiceHeap[i] = -1;
-    }
-    for (int i=0;i<this.longitud;i++){ 
-        this.heap.add(arr[i]);
-        this.id_a_indiceHeap[arr[i].obtenerId()] = i;
-    }
-    ordenInicial();
-}
+        //O(I)
+        for (int i = 0; i < maxId; i++) {
+            this.id_a_indiceHeap[i] = -1;//O(1)
+        }
 
+        //O(N)
+        for (int i=0;i<this.longitud;i++){ 
+            this.heap.add(arr[i]);//O(1)
+            this.id_a_indiceHeap[arr[i].obtenerId()] = i;//O(1)
+        }
+        ordenInicial();//O(N)
+    }
+
+    //O(N)
     public Heap (ArrayList<T> arr, int t){
-        this.longitud = arr.size();     
-        this.heap = new ArrayList<T>();
-        this.id_a_indiceHeap = new int[this.longitud];
-        this.tipoHeap = t;
+        this.longitud = arr.size();//O(1)     
+        this.heap = new ArrayList<T>();//O(1)
+        this.id_a_indiceHeap = new int[this.longitud];//O(1)
+        this.tipoHeap = t;//O(1)
+
+        //O(N)
         for (int i=0;i<this.longitud;i++){
-            this.heap.add(arr.get(i)); 
-            this.id_a_indiceHeap[i] = i;
+            this.heap.add(arr.get(i)); //O(1)
+            this.id_a_indiceHeap[i] = i;//O(1)
         }
-        ordenInicial();
+
+        ordenInicial();//O(N)
     }
 
-    public Heap (T[] arr, int t){ //O(n)
-        this.longitud = arr.length; 
-        this.heap = new ArrayList<T>();
-        this.id_a_indiceHeap = new int[this.longitud];
-        this.tipoHeap = t;
-        for (int i=0;i<this.longitud;i++){ //O(n)
-            this.heap.add(arr[i]);
-            this.id_a_indiceHeap[i] = i;
+    //O(N)
+    public Heap (T[] arr, int t){
+        this.longitud = arr.length;//O(1) 
+        this.heap = new ArrayList<T>();//O(1)
+        this.id_a_indiceHeap = new int[this.longitud];//O(1)
+        this.tipoHeap = t;//O(1)
+
+        //O(N)
+        for (int i=0;i<this.longitud;i++){
+            this.heap.add(arr[i]);//O(1)
+            this.id_a_indiceHeap[i] = i;//O(1)
         }
-        ordenInicial();
+        
+        ordenInicial();//O(N)
     }
 
-    private void ordenInicial(){ //O(n)
+    //O(N)
+    private void ordenInicial(){ 
         for (int i = padre(this.longitud-1);i>=0;i--){
             siftDown(i);
         }
     }
 
-    public void agregar(T obj){  //O(log(n))
-        this.longitud++;
-        this.heap.add(obj);
-        siftUp(this.longitud-1);      
+    //O(log(N))
+    public void agregar(T obj){ 
+        int id = obj.obtenerId();
+        if (this.id_a_indiceHeap[id] == -1){
+            this.longitud++;//O(1)
+            this.heap.add(obj);//O(1)
+            siftUp(this.longitud-1);//O(log(N)) 
+        }   
     }   
 
-    public void anularId(int id){
-        this.id_a_indiceHeap[id] = -1;
-    }
-    //O(log(n))
+    //O(log(N))
     public void borrar_por_id(int id){ 
         if (this.id_a_indiceHeap[id] != -1){
             this.borrar(this.id_a_indiceHeap[id]);
             this.id_a_indiceHeap[id] = -1;
         }
     }
+
     //O(log(n))
     public void borrar(int indice){
         cambiar(indice, this.longitud-1);
@@ -87,19 +102,23 @@ public Heap (T[] arr, int t, int maxId){ // O(n)
     public void actualizar_nota_id(int id){
         actualizar_nodo(id_a_indiceHeap[id]);
     }
+
     //O(log(n))
     private void actualizar_nodo(int indice){
         siftDown(indice);
     }
 
+    //O(1)
     private int padre(int i){
         return (i-1)/2;
     }
 
+    //O(1)
     private int izq(int i){
         return 2*i+1;
     }
 
+    //O(1)
     private int der(int i){
         return 2*i+2;
     }
@@ -144,15 +163,18 @@ public Heap (T[] arr, int t, int maxId){ // O(n)
         }
         return;
     }
+
     //O(1)
     public T raiz(){
         return this.heap.get(0);
     }
+
     //O(1)
     public T obtener_con_id(int id){
         int indice = this.id_a_indiceHeap[id];
         return this.obtener(indice);
     }
+    
     //O(1)
     public T obtener(int indice){
         return this.heap.get(indice);
