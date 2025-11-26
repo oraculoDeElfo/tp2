@@ -65,27 +65,15 @@ public class Alumno implements Indexable<Alumno>{
     }
 
     @Override
-    //O(1)
     public int compareTo(Alumno alumno2){
-        //O(1)
-        if (alumno2.respuestasCorrectas > this.respuestasCorrectas){
-            return -1;
-        }
-        //O(1)
-        else if (alumno2.respuestasCorrectas < this.respuestasCorrectas) {
-            return 1;
-        }
-        //O(1)
-        else {
-            if (alumno2.id < this.id){
-                return 1;
-            }
-            else if (alumno2.id > this.id){
-                return -1;
-            }
-            else {
-                return 0;
-            }
-        }
+    // Nota Ascendente (peor nota = "menor" elemento)
+    int comparacionNota = Integer.compare(this.respuestasCorrectas, alumno2.respuestasCorrectas);
+    
+    if (comparacionNota != 0){
+        return comparacionNota;
+    } else {
+        // Desempate por ID Ascendente (menor ID = "menor" elemento)
+        return Integer.compare(alumno2.id,this.id);
     }
+}
 }

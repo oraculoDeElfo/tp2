@@ -19,7 +19,7 @@ public class Edr {
             this.alumnos.add(new Alumno(i, ExamenCanonico.length)); //O(R)
         }
 
-        this.alumnos_menor_nota = new Heap<Alumno>(this.alumnos,-1); //O(E)
+        this.alumnos_menor_nota = new Heap<Alumno>(this.alumnos,-1, Cant_estudiantes); //O(E)
         this.no_se_copiaron = new ArrayList<Alumno>(); //O(1)
     }
 

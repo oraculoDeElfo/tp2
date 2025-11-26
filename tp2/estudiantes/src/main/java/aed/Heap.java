@@ -1,9 +1,7 @@
 package aed;
-
 import java.util.ArrayList;
 
 public class Heap<T extends Indexable<T>> {
-    
     private ArrayList<T> heap; //N = Largo del array
     private int[] id_a_indiceHeap; //I = Largo del array
     private int longitud;
@@ -28,36 +26,23 @@ public class Heap<T extends Indexable<T>> {
         }
         ordenInicial();//O(N)
     }
+    //O(N+I) -> Como sabemos que N>=I -> //O(N)
+    public Heap (ArrayList<T> arr, int t, int maxId){ 
+        this.longitud = arr.size();//O(1)
+        this.heap = new ArrayList<T>();// O(1)
+        this.id_a_indiceHeap = new int[maxId]; // O(1)
+        this.tipoHeap = t;// O(1)
 
-    //O(N)
-    public Heap (ArrayList<T> arr, int t){
-        this.longitud = arr.size();//O(1)     
-        this.heap = new ArrayList<T>();//O(1)
-        this.id_a_indiceHeap = new int[this.longitud];//O(1)
-        this.tipoHeap = t;//O(1)
-
-        //O(N)
-        for (int i=0;i<this.longitud;i++){
-            this.heap.add(arr.get(i)); //O(1)
-            this.id_a_indiceHeap[i] = i;//O(1)
+        //O(I)
+        for (int i = 0; i < maxId; i++) {
+            this.id_a_indiceHeap[i] = -1;//O(1)
         }
 
-        ordenInicial();//O(N)
-    }
-
-    //O(N)
-    public Heap (T[] arr, int t){
-        this.longitud = arr.length;//O(1) 
-        this.heap = new ArrayList<T>();//O(1)
-        this.id_a_indiceHeap = new int[this.longitud];//O(1)
-        this.tipoHeap = t;//O(1)
-
         //O(N)
-        for (int i=0;i<this.longitud;i++){
-            this.heap.add(arr[i]);//O(1)
-            this.id_a_indiceHeap[i] = i;//O(1)
+        for (int i=0;i<this.longitud;i++){ 
+            this.heap.add(arr.get(i));//O(1)
+            this.id_a_indiceHeap[arr.get(i).obtenerId()] = i;//O(1)
         }
-        
         ordenInicial();//O(N)
     }
 
@@ -82,19 +67,34 @@ public class Heap<T extends Indexable<T>> {
     public void borrar_por_id(int id){ 
         if (this.id_a_indiceHeap[id] != -1){
             this.borrar(this.id_a_indiceHeap[id]);
-            this.id_a_indiceHeap[id] = -1;
         }
     }
 
     //O(log(n))
     public void borrar(int indice){
+        T a_borrar = this.heap.get(indice); // Elemento que vamos a borrar
+    
+        // 1. Intercambia 'a_borrar' con el último elemento.
         cambiar(indice, this.longitud-1);
+    
+        // 2. Obtiene el ID del elemento que ahora es el último (el que vamos a remover).
+        int id_eliminado = a_borrar.obtenerId();
+    
+        // 3. Remueve el último elemento y decrementa la longitud.
         this.heap.remove(this.longitud-1);
         this.longitud--;
+    
+        // 4. Desregistra el ID del elemento eliminado.
+        this.id_a_indiceHeap[id_eliminado] = -1;
+    
+        // Si el índice que nos quedó es la nueva longitud (o sea, estaba en la última posición original), terminamos.
         if (indice == this.longitud){return;}
+    
+        // 5. Ajusta el nuevo elemento en la posición 'indice'.
         if((indice == 0) || this.tipoHeap * this.heap.get(indice).compareTo(this.heap.get(padre(indice))) > 0){
             siftDown(indice);
-        } else{
+        }
+        else{
             siftUp(indice);
         }
     }
@@ -105,8 +105,17 @@ public class Heap<T extends Indexable<T>> {
 
     //O(log(n))
     private void actualizar_nodo(int indice){
-        siftDown(indice);
+        // Caso 1: Si NO soy la raíz Y soy "mejor" que mi padre -> DEBO SUBIR
+        if(indice > 0 && this.tipoHeap * this.heap.get(indice).compareTo(this.heap.get(padre(indice))) > 0){
+            siftUp(indice);
+        }
+        // Caso 2: En cualquier otro caso (soy raíz o soy peor que mi padre) -> DEBO INTENTAR BAJAR
+        // (siftDown se encargará de ver si soy peor que mis hijos)
+        else{
+            siftDown(indice);
+        }
     }
+    
 
     //O(1)
     private int padre(int i){

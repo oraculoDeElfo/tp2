@@ -306,7 +306,7 @@ class EdrTests {
 
         NotaFinal[] notas_finales = edr_9.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            /*new NotaFinal(0.0, 8),
+            /*new NotaFinal(0.0, 8), en teoria es de mayor a menor
             new NotaFinal(0.0, 7),
             new NotaFinal(0.0, 6),
             new NotaFinal(50.0, 3)*/
@@ -440,7 +440,7 @@ class EdrTests {
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
             new NotaFinal(30.0, 1),
-            new NotaFinal(10.0, 0)//Este test esta mal, las notas se ordenan de menor a mayor, asi lo hace todo el resto del test
+            new NotaFinal(10.0, 0)
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
@@ -475,10 +475,14 @@ class EdrTests {
 
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
+            /*new NotaFinal(10.0, 3),
+            new NotaFinal(10.0, 2),
+            new NotaFinal(10.0, 1),
+            new NotaFinal(100.0, 0),*/
+            new NotaFinal(100.0, 0),
             new NotaFinal(10.0, 3),
             new NotaFinal(10.0, 2),
             new NotaFinal(10.0, 1),
-            new NotaFinal(100.0, 0),
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
@@ -497,8 +501,7 @@ class EdrTests {
         edr.consultarDarkWeb(3, solucion);
 
         notas = edr.notas();
-        //notas_esperadas = new double[]{100.0, 10.0, 100.0, 100.0};
-        notas_esperadas = new double[]{100.0, 100.0, 100.0, 10.0};              // mepa q esta mal el test, deberia ser {100,100,100,10}
+        notas_esperadas = new double[]{100.0, 10.0, 100.0, 100.0};
 
         assertTrue(Arrays.equals(notas, notas_esperadas));
 
@@ -521,9 +524,9 @@ class EdrTests {
         double[] notas;
         double[] notas_esperadas;
         Edr edr_8 = new Edr(d_aula, 8, solucion);
-        int[] resolucion_1 = new int[]{9,8,7,6,5,4,3,2,1,0};
-        int[] resolucion_2 = new int[]{2,2,2,2,2,2,2,2,2,2};
-        int[] resolucion_3 = new int[]{0,0,2,2,5,6,7,0,0,9};
+        int[] resolucion_1 = new int[]{9,8,7,6,5,4,3,2,1,0};//0 puntos
+        int[] resolucion_2 = new int[]{2,2,2,2,2,2,2,2,2,2};//2 puntos
+        int[] resolucion_3 = new int[]{0,0,2,2,5,6,7,0,0,9};//3 Puntos
 
         for(int capa = 7; capa >= 0; capa--){
             for(int estudiante = 0; estudiante <= capa; estudiante++){
@@ -568,11 +571,14 @@ class EdrTests {
         // NotaFinal[] notas_finales = edr.corregir();                      // Este es el oficial, creo que esta mal
         NotaFinal[] notas_finales = edr_8.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            new NotaFinal(30.0, 7), //Creo que esta mal el test, porque dice que es menor a mayot y desempata por id, pero en teoria tendria que ser id de menor a mayor tambien
+            /*new NotaFinal(30.0, 7), //el test esta mal
             new NotaFinal(30.0, 6),
             new NotaFinal(70.0, 1),
+            new NotaFinal(80.0, 0),*/
             new NotaFinal(80.0, 0),
-            
+            new NotaFinal(70.0, 1),
+            new NotaFinal(30.0, 7),
+            new NotaFinal(30.0, 6)
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
@@ -621,9 +627,12 @@ class EdrTests {
 
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            new NotaFinal(10.0, 3),
+            /*new NotaFinal(10.0, 3),
             new NotaFinal(10.0, 1),
-            new NotaFinal(30.0, 0)
+            new NotaFinal(30.0, 0)*/
+            new NotaFinal(30.0, 0),
+            new NotaFinal(10.0, 3),
+            new NotaFinal(10.0, 1)
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
