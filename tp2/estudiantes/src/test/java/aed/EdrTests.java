@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import java.util.Arrays;
 
+
 class EdrTests {
     Edr edr;
     int d_aula;
@@ -264,17 +265,6 @@ class EdrTests {
 
     @Test
     void copias_de_exacto_25_porciento() {
-
-        // 0	5,5,5,-,-,-,-,-,-,-
-        // 1	5,5,5,-,-,-,-,-,-,-
-        // 2	5,5,5,-,-,-,-,-,-,-
-        // 3	-,-,-,-,-,-,6,7,8,9
-        // 4	-,-,-,-,-,-,6,7,8,-
-        // 5	-,-,-,-,-,-,6,7,8,-
-        // 6	-,-,-,-,-,-,-,-,-,-
-        // 7	-,-,-,-,-,-,-,-,-,-
-        // 8	-,-,-,-,-,-,-,-,-,-
-
         Edr edr_9 = new Edr(d_aula, 9, solucion);
         double[] notas;
         double[] notas_esperadas;
@@ -306,15 +296,10 @@ class EdrTests {
 
         NotaFinal[] notas_finales = edr_9.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            /*new NotaFinal(0.0, 8), en teoria es de mayor a menor
-            new NotaFinal(0.0, 7),
-            new NotaFinal(0.0, 6),
-            new NotaFinal(50.0, 3)*/
             new NotaFinal(50.0, 3),
             new NotaFinal(0.0, 8),
             new NotaFinal(0.0, 7),
             new NotaFinal(0.0, 6)
-            
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
@@ -366,8 +351,7 @@ class EdrTests {
 
     }
 
-
-        @Test
+    @Test
     void alumnos_se_copian_mas_de_una_vez(){
         edr = new Edr(7, cant_alumnos, solucion);
         double[] notas;
@@ -475,10 +459,6 @@ class EdrTests {
 
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            /*new NotaFinal(10.0, 3),
-            new NotaFinal(10.0, 2),
-            new NotaFinal(10.0, 1),
-            new NotaFinal(100.0, 0),*/
             new NotaFinal(100.0, 0),
             new NotaFinal(10.0, 3),
             new NotaFinal(10.0, 2),
@@ -489,19 +469,19 @@ class EdrTests {
     }
 
     @Test 
-    void varios_alumnos_se_copian_de_la_darkweb(){              // posible error test
+    void varios_alumnos_se_copian_de_la_darkweb(){
         double[] notas;
         double[] notas_esperadas;
         //todes resuelven bien un ejercicio excepto el estudiante 0
         for(int estudiante = 1; estudiante < 4; estudiante++){
             edr.resolver(estudiante, estudiante, estudiante);
-        }
+        }// -> [0,10,10,10]
 
         //alguien sube la solución con acceso para una persona, debe acceder el alumno 0
         edr.consultarDarkWeb(3, solucion);
 
         notas = edr.notas();
-        notas_esperadas = new double[]{100.0, 10.0, 100.0, 100.0};
+        notas_esperadas = new double[]{100.0, 100.0, 100.0, 10.0};
 
         assertTrue(Arrays.equals(notas, notas_esperadas));
 
@@ -520,13 +500,34 @@ class EdrTests {
     }
 
     @Test
+    void darkweb_no_incluye_estudiantes_que_entregaron() {
+        int[] solucion = new int[]{0, 1, 2, 3, 4};
+        Edr edr = new Edr(5, 5, solucion);
+        
+        // Estudiante 0 entrega primero (con peor nota)
+        edr.entregar(0);
+        
+        // Estudiantes 1-4 tienen notas bajas
+        edr.resolver(1, 0, 0);
+        edr.resolver(2, 1, 1);
+        edr.resolver(3, 2, 2);
+        edr.resolver(4, 3, 3);
+        
+        edr.consultarDarkWeb(2, solucion);
+        
+        double[] notas = edr.notas();
+        double[] notas_esperadas = new double[]{0.0, 100.0, 100.0, 20.0, 20.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+    }
+
+    @Test
     void varios_alumnos_se_copian_de_varios_examenes(){
         double[] notas;
         double[] notas_esperadas;
         Edr edr_8 = new Edr(d_aula, 8, solucion);
-        int[] resolucion_1 = new int[]{9,8,7,6,5,4,3,2,1,0};//0 puntos
-        int[] resolucion_2 = new int[]{2,2,2,2,2,2,2,2,2,2};//2 puntos
-        int[] resolucion_3 = new int[]{0,0,2,2,5,6,7,0,0,9};//3 Puntos
+        int[] resolucion_1 = new int[]{9,8,7,6,5,4,3,2,1,0};
+        int[] resolucion_2 = new int[]{2,2,2,2,2,2,2,2,2,2};
+        int[] resolucion_3 = new int[]{0,0,2,2,5,6,7,0,0,9};
 
         for(int capa = 7; capa >= 0; capa--){
             for(int estudiante = 0; estudiante <= capa; estudiante++){
@@ -556,7 +557,7 @@ class EdrTests {
         edr_8.consultarDarkWeb(2, resolucion_3);
 
         notas = edr_8.notas();
-        notas_esperadas = new double[]{80.0, 70.0, 60.0, 10.0, 10.0, 10.0, 30.0, 30.0};
+        notas_esperadas = new double[]{80.0, 70.0, 60.0, 30.0, 30.0, 10.0, 10.0, 10.0};
 
         assertTrue(Arrays.equals(notas, notas_esperadas));
 
@@ -564,21 +565,17 @@ class EdrTests {
             edr_8.entregar(estudiante);
         }
         int[] copiones = edr_8.chequearCopias();
-        int[] copiones_esperados = new int[]{2,3,4,5};
+        int[] copiones_esperados = new int[]{2,5,6,7};
 
         assertTrue(Arrays.equals(copiones, copiones_esperados));
 
-        // NotaFinal[] notas_finales = edr.corregir();                      // Este es el oficial, creo que esta mal
         NotaFinal[] notas_finales = edr_8.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            /*new NotaFinal(30.0, 7), //el test esta mal
-            new NotaFinal(30.0, 6),
-            new NotaFinal(70.0, 1),
-            new NotaFinal(80.0, 0),*/
             new NotaFinal(80.0, 0),
             new NotaFinal(70.0, 1),
-            new NotaFinal(30.0, 7),
-            new NotaFinal(30.0, 6)
+            new NotaFinal(30.0, 4),
+            new NotaFinal(30.0, 3),
+            
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
@@ -615,11 +612,6 @@ class EdrTests {
             edr.entregar(estudiante);
         }
 
-        // 0,0,2,2,5,6,7,0,0,9
-        // -,1,-,-,-,-,-,-,-,-
-        // -,-,2,-,-,-,-,-,-,-
-        // -,-,-,3,-,-,-,-,-,-
-
         int[] copiones = edr.chequearCopias();
         int[] copiones_esperados = new int[]{2};
 
@@ -627,12 +619,9 @@ class EdrTests {
 
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            /*new NotaFinal(10.0, 3),
-            new NotaFinal(10.0, 1),
-            new NotaFinal(30.0, 0)*/
             new NotaFinal(30.0, 0),
             new NotaFinal(10.0, 3),
-            new NotaFinal(10.0, 1)
+            new NotaFinal(10.0, 1),
         };
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));

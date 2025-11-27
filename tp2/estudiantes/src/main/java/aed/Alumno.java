@@ -73,7 +73,8 @@ public class Alumno implements Indexable<Alumno>{
         return comparacionNota;
     } else {
         // Desempate por ID Ascendente (menor ID = "menor" elemento)
-        return Integer.compare(alumno2.id,this.id);
+        return Integer.compare(this.id, alumno2.id);
+        
     }
 }
 }
