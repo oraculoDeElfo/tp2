@@ -72,19 +72,24 @@ public class Edr {
         int[] vecino_Ade_examen = dummy;//O(1)
 
         if (((2 * estudiante) % this.ladoAula != 0) && ((2 * estudiante) % this.ladoAula != 1)){//O(1)
-            vecino_Izq_examen = this.alumnos.get(estudiante - 1).obtenerExamen();//O(1)
+            Alumno aux = this.alumnos.get(estudiante -1);
+            if(!aux.obtenerEstado()){
+                vecino_Izq_examen = aux.obtenerExamen();//O(1)
+            }
         }
 
         if(!(((2 * estudiante) % this.ladoAula + 2 >= this.ladoAula) || (estudiante == this.alumnos.size()-1))){//O(1)
-            vecino_Der_examen = this.alumnos.get(estudiante + 1).obtenerExamen();//O(1)
+            Alumno aux = this.alumnos.get(estudiante +1);
+            if(!aux.obtenerEstado()){
+                vecino_Der_examen = aux.obtenerExamen();//O(1)
+            }
         }
 
         if((2 * estudiante) > this.ladoAula){//O(1)
-            if (this.ladoAula % 2 == 0){//O(1)
-                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//O(1)
-            }
-            else{
-                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//O(1) 
+            Alumno aux = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2));//O(1) 
+            
+            if(!aux.obtenerEstado()){
+                vecino_Ade_examen = aux.obtenerExamen();//O(1)
             }
         }
         

@@ -245,6 +245,29 @@ class EdrTestsNuestros {
     }
 
     @Test
+    void copiarse_de_entregados(){
+        edr = new Edr(5, 6, solucion);
+        double[] notas;
+        double[] notas_esperadas;
+
+        edr.resolver(1, 1, 1);
+        edr.resolver(1, 2, 2);
+        edr.resolver(3, 3, 3);
+
+        
+        notas = edr.notas();
+        notas_esperadas = new double[]{0.0, 20.0, 0.0, 10.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+        edr.entregar(1);
+
+        edr.copiarse(4);
+        
+        notas = edr.notas();
+        notas_esperadas = new double[]{0.0, 20.0, 0.0, 10.0, 10.0, 0.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+    }
+
+    @Test
     void reuelve_la_misma_pregunta(){
         edr = new Edr(5, 6, solucion);
         double[] notas;

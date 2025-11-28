@@ -63,6 +63,10 @@ public class Alumno implements Indexable<Alumno>{
         return this.id;//O(1)
     }
 
+    public boolean obtenerEstado(){
+        return this.entregado;
+    }
+
     @Override
     public int compareTo(Alumno alumno2){
     // Nota Ascendente (peor nota = "menor" elemento)
