@@ -146,7 +146,7 @@ public class Heap<T extends Indexable<T>> {
     }
 
     //O(log(n))
-    public void siftDown(int i){
+    private void siftDown(int i){
         //O(1)
         if (izq(i) > this.longitud-1){
             return;
@@ -167,7 +167,7 @@ public class Heap<T extends Indexable<T>> {
         }
     }
     //O(log(n))
-    public void siftUp(int i){
+    private void siftUp(int i){
         if (i==0){return;}
         if (this.tipoHeap * this.heap.get(i).compareTo(this.heap.get(padre(i))) > 0){
             cambiar(i, padre(i));
@@ -193,18 +193,3 @@ public class Heap<T extends Indexable<T>> {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

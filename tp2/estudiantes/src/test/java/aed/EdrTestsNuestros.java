@@ -1,11 +1,7 @@
 package aed;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 
 class EdrTestsNuestros {
@@ -220,6 +216,142 @@ class EdrTestsNuestros {
         double[] notas_esperadas_2 = new double[]{100.0, 100.0, 33.0, 33.0};
         assertTrue(Arrays.equals(notas_esperadas_2, notas));
     }
+    @Test
+    void corregir_sin_no_se_copiaron() {
+        int[] solucion = new int[]{0, 1, 2, 3, 4};
+        edr = new Edr(5, 3, solucion);
+        NotaFinal[] res = edr.corregir();
+        assertEquals(0, res.length);
+    }
+
+    @Test
+    void consultarDarkWeb_n_cero() {
+       int[] solucion = new int[]{0,1,2,3};
+       Edr edr = new Edr(5, 4, solucion);
+       edr.resolver(1, 0, 0);
+       double[] antes = edr.notas();
+       edr.consultarDarkWeb(0, solucion);
+       double[] despues = edr.notas();
+       assertTrue(Arrays.equals(antes, despues));
+    }
+
+    @Test
+    void todxs_consultan_DarkWeb() {
+       int[] solucion = new int[]{0,1,2};
+       Edr edr = new Edr(3, 3, solucion);
+      
+       edr.resolver(0, 0, 0);
+       edr.resolver(1, 1, 1);
+       edr.resolver(2, 2, 2);
+      
+       for (int i = 0; i < 3; i++) {
+           edr.consultarDarkWeb(i, solucion);
+       }
+      
+       double[] notas = edr.notas();
+       double[] notas_esperadas = new double[]{100.0, 100.0, 100.0};
+      
+       assertTrue(Arrays.equals(notas_esperadas, notas));
+    }
+
+    @Test
+    void copiarse_con_mismas_respuestas() {
+        edr = new Edr(5, 4, solucion);
+        double[] notas;
+        double[] notas_esperadas;
+
+
+ 
+        edr.resolver(0, 0, 0);
+        edr.resolver(0, 1, 1);
+        edr.resolver(0, 2, 2);
+  
+        edr.resolver(1, 0, 0);
+        edr.resolver(1, 1, 1);
+        edr.resolver(1, 2, 2);
+  
+        edr.resolver(2, 0, 0);
+        edr.resolver(2, 1, 1);
+        edr.resolver(2, 2, 2);
+
+        edr.resolver(3, 0, 0);
+        edr.resolver(3, 1, 1);
+        edr.resolver(3, 2, 2);
+
+
+        notas = edr.notas();
+        notas_esperadas = new double[]{30.0, 30.0, 30.0, 30.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+
+        edr.copiarse(1);
+  
+        notas = edr.notas();
+        notas_esperadas = new double[]{30.0, 30.0, 30.0, 30.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+    }
+
+    @Test
+    void consultarDarkWeb_con_estudiantes_entregados() {
+        int[] sol = new int[]{0, 1, 2};
+        edr = new Edr(3, 3, sol);
+  
+        edr.resolver(0, 0, 0);
+        edr.resolver(1, 1, 1);
+        edr.entregar(0);
+  
+        double[] antes = edr.notas();
+        edr.consultarDarkWeb(1, sol);
+        double[] despues = edr.notas();
+  
+        assertFalse(Arrays.equals(antes, despues));
+    }
+
+    @Test
+    void alumno_se_copia_varias_veces() {
+        edr = new Edr(5, 4, solucion);
+        double[] notas;
+        double[] notas_esperadas;
+
+        edr.resolver(0, 0, 0);
+        edr.resolver(0, 1, 1);
+        edr.resolver(0, 2, 2);
+        edr.resolver(1, 3, 3);
+        edr.resolver(1, 4, 4);
+        edr.resolver(2, 5, 5);
+        edr.resolver(2, 6, 6);
+        edr.resolver(3, 7, 7);
+
+        notas = edr.notas();
+        notas_esperadas = new double[]{30.0, 20.0, 20.0, 10.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+        edr.copiarse(3);
+        notas = edr.notas();
+        notas_esperadas = new double[]{30.0, 20.0, 20.0, 20.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+        edr.copiarse(3);
+        notas = edr.notas();
+        notas_esperadas = new double[]{30.0, 20.0, 20.0, 30.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+        edr.copiarse(3);
+        notas = edr.notas();
+        notas_esperadas = new double[]{30.0, 20.0, 20.0, 40.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+        for(int alumno = 0; alumno < 4; alumno++){
+            edr.entregar(alumno);
+        }
+
+
+}
+
+
+
+
+
 }
 
 

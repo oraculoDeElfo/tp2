@@ -39,7 +39,7 @@ public class Edr {
 
 //------------------------------------------------COPIARSE------------------------------------------------------------------------
     //O(R+log(E))
-    private void copiarseAux(Alumno se_copia, int[] copiado_ex){
+    private void copiarseAux(Alumno se_copia, int[] copiado_ex, int[] canonico){
         int[] se_copia_examen = se_copia.obtenerExamen();//O(1)
         int i = 0;//O(1)
 
@@ -51,6 +51,7 @@ public class Edr {
         //O(log(E))
         if (i<se_copia_examen.length){//O(1)
             se_copia.modificarExamen(i, copiado_ex[i]); //O(1)
+            se_copia.actualizarNota(canonico);
             this.alumnos_menor_nota.actualizar_nota_id(se_copia.obtenerId()); //O(log(E))
         }
     }
@@ -74,7 +75,7 @@ public class Edr {
             vecino_Izq_examen = this.alumnos.get(estudiante - 1).obtenerExamen();//O(1)
         }
 
-        if(!(((2 * estudiante) % this.ladoAula + 2 >= this.ladoAula) || (estudiante == this.alumnos.size()-1))){//O(1) //Arreglar comparacion
+        if(!(((2 * estudiante) % this.ladoAula + 2 >= this.ladoAula) || (estudiante == this.alumnos.size()-1))){//O(1)
             vecino_Der_examen = this.alumnos.get(estudiante + 1).obtenerExamen();//O(1)
         }
 
@@ -83,7 +84,7 @@ public class Edr {
                 vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//O(1)
             }
             else{
-                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//O(1) //cambiamos el +1 por -1
+                vecino_Ade_examen = this.alumnos.get(estudiante - ((this.ladoAula + 1)/2)).obtenerExamen();//O(1) 
             }
         }
         
@@ -108,17 +109,17 @@ public class Edr {
         }
         //O(R+log(E))
         if ((contador_vecino_Der >= contador_vecino_Izq && contador_vecino_Izq >= contador_vecino_Ade) || (contador_vecino_Der >= contador_vecino_Ade && contador_vecino_Ade >= contador_vecino_Izq)){
-            copiarseAux(se_copia, vecino_Der_examen);
+            copiarseAux(se_copia, vecino_Der_examen, this.canonico);
             return; 
         }
         //O(R+log(E))
         if ((contador_vecino_Izq >= contador_vecino_Der && contador_vecino_Der >= contador_vecino_Ade) || (contador_vecino_Izq >= contador_vecino_Ade && contador_vecino_Ade >= contador_vecino_Der)){
-            copiarseAux(se_copia, vecino_Izq_examen);
+            copiarseAux(se_copia, vecino_Izq_examen, this.canonico);
             return; 
         }
         //O(R+log(E))
         if ((contador_vecino_Ade >= contador_vecino_Der && contador_vecino_Der >= contador_vecino_Izq) || (contador_vecino_Ade >= contador_vecino_Izq && contador_vecino_Izq >= contador_vecino_Der)){
-            copiarseAux(se_copia, vecino_Ade_examen);
+            copiarseAux(se_copia, vecino_Ade_examen, this.canonico);
             return; 
         }
         else{
