@@ -368,6 +368,22 @@ class EdrTestsNuestros {
         NotaFinal[] res = edr.corregir();
         assertEquals(0, res.length);
     }
+
+    @Test
+    void chequearCopias_Con_1_alumno() {
+        int[] solucion = new int[]{0, 1, 2, 3, 4,5,6,7,8,9};
+        edr = new Edr(4, 1, solucion);
+        edr.resolver(0,0 ,0 );
+        double[] notas = edr.notas();
+        double[] notas_esperadas = new double[]{10.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+        edr.entregar(0);
+        int[] copiones_esperados = new int[0];
+        int[] copiones = edr.chequearCopias();
+        assertTrue(Arrays.equals(copiones_esperados, copiones));
+    }
+
 }
 
 

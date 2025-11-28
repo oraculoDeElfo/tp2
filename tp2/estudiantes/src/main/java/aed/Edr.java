@@ -205,7 +205,7 @@ public class Edr {
                 }
             }
         }
-        int unCuartoDelAula = (this.alumnos.size() -2)/4 + 1;//O(1)  //ver que no se rompa si hay un solo estudiante
+        int unCuartoDelAula = (this.alumnos.size() -2)/4 + 1;//O(1)  
 
         //O(E*R)
         for (int i=0; i<this.alumnos.size();i++){ //O(E)
