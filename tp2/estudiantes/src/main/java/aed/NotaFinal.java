@@ -39,4 +39,9 @@ public class NotaFinal implements Indexable<NotaFinal> {
     public int obtenerId(){
         return this._id;
     }
+
+    //O(1)
+    public void actualizarNotar(double nota){
+        _nota = nota;
+    }
 }

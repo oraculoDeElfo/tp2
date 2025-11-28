@@ -72,30 +72,31 @@ public class Heap<T extends Indexable<T>> {
 
     //O(log(n))
     public void borrar(int indice){
-        T a_borrar = this.heap.get(indice); // Elemento que vamos a borrar
-    
-        // 1. Intercambia 'a_borrar' con el último elemento.
+        //O(1)
+        T a_borrar = this.heap.get(indice);
+        
+        //O(1)
         cambiar(indice, this.longitud-1);
-    
-        // 2. Obtiene el ID del elemento que ahora es el último (el que vamos a remover).
+        
+        //O(1)
         int id_eliminado = a_borrar.obtenerId();
-    
-        // 3. Remueve el último elemento y decrementa la longitud.
+        
+        //O(1)
         this.heap.remove(this.longitud-1);
         this.longitud--;
-    
-        // 4. Desregistra el ID del elemento eliminado.
+
+        //O(1)
         this.id_a_indiceHeap[id_eliminado] = -1;
-    
-        // Si el índice que nos quedó es la nueva longitud (o sea, estaba en la última posición original), terminamos.
+        
+        //O(1)
         if (indice == this.longitud){return;}
     
-        // 5. Ajusta el nuevo elemento en la posición 'indice'.
+        //O(log N)
         if((indice == 0) || this.tipoHeap * this.heap.get(indice).compareTo(this.heap.get(padre(indice))) > 0){
-            siftDown(indice);
+            siftDown(indice);//O(log N)
         }
         else{
-            siftUp(indice);
+            siftUp(indice);//O(log N)
         }
     }
     //O(log(n))
@@ -105,14 +106,12 @@ public class Heap<T extends Indexable<T>> {
 
     //O(log(n))
     private void actualizar_nodo(int indice){
-        // Caso 1: Si NO soy la raíz Y soy "mejor" que mi padre -> DEBO SUBIR
+        //O(log N)
         if(indice > 0 && this.tipoHeap * this.heap.get(indice).compareTo(this.heap.get(padre(indice))) > 0){
-            siftUp(indice);
+            siftUp(indice);//O(log N)
         }
-        // Caso 2: En cualquier otro caso (soy raíz o soy peor que mi padre) -> DEBO INTENTAR BAJAR
-        // (siftDown se encargará de ver si soy peor que mis hijos)
         else{
-            siftDown(indice);
+            siftDown(indice);//O(log N)
         }
     }
     
@@ -148,19 +147,23 @@ public class Heap<T extends Indexable<T>> {
 
     //O(log(n))
     public void siftDown(int i){
+        //O(1)
         if (izq(i) > this.longitud-1){
             return;
         }
-        int aux = i;
+        int aux = i;//O(1)
+        //O(1)
         if(this.tipoHeap * this.heap.get(aux).compareTo(this.heap.get(izq(i))) < 0){
             aux = izq(i);
         }
+        //O(1)
         if((der(i)<=this.longitud-1) && (this.tipoHeap * this.heap.get(aux).compareTo(this.heap.get(der(i))) < 0)){
             aux = der(i);
         }
+        //O(log N)
         if (aux != i){
             cambiar(aux,i);
-            siftDown(aux);
+            siftDown(aux);//O(log N)
         }
     }
     //O(log(n))

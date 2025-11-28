@@ -41,7 +41,6 @@ public class Alumno implements Indexable<Alumno>{
     //O(1)
     public void modificarExamen(int NroEjercicio, int res){
         this.examen[NroEjercicio] = res;//O(1)
-        this.respuestasCorrectas += 1;//O(1)  
     }
 
     //O(1)

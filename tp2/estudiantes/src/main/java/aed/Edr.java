@@ -131,7 +131,7 @@ public class Edr {
     public void resolver(int estudiante, int NroEjercicio, int res) {
         Alumno estud = this.alumnos.get(estudiante); //O(1)
         estud.modificarExamen(NroEjercicio, res);  // O(1)
-        estud.actualizarNota(canonico); // O(1)
+        estud.actualizarNota(canonico); //O(1)
 
         if  (alumnos_menor_nota.obtener_con_id(estudiante) == null){
             alumnos_menor_nota.agregar(estud);// O(log(E))
